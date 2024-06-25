@@ -41,12 +41,17 @@
 
    1. ESPs:
        1. Reguladores Solares:
-                - EPEVER
+
+          1. EPEVER
   
-       2. SHUNTS:
-               - Junctek KG140F
+       3. SHUNTS:
+
+          1. Junctek KG140F
   
-       3. BMS:
-               - JK BMS
+       5. BMS:
+
+          1. JK BMS
+
+                  - https://github.com/syssi/esphome-jk-bms/tree/main
 
     
