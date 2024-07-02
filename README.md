@@ -1,4 +1,4 @@
-1. Pre-requisitos
+81. Pre-requisitos
     - Computo:
        1. Raspberry pi (Se recomienda 3b o superior)
            https://s.click.aliexpress.com/e/_Ex8kmc7
@@ -10,9 +10,9 @@
         Propio móvil
     -  Dispositivos:
         (En este punto entraría en juego las necesidades de cada uno y que queremos monitorizar/controlar)
-        ESP32
-        ESP8266
-        Arduino
+       1. ESP32.  https://s.click.aliexpress.com/e/_Evd27Kb
+       2. ESP8266. https://s.click.aliexpress.com/e/_Ey6mt3l
+       3. Arduino
 
 2. Instalación Server 
    En el apartado anterior hemos visto que necesitamos unmodulo de computo (RasPi o MiniPC) en el cual necesitamos albergar el server, que va a ser el encargado de recoger todos los datos y realizar los automatismos que deseemos.
@@ -46,16 +46,18 @@
    1. ESPs:
        1. Reguladores Solares:
 
-          1. EPEVER
+          1. EPEVER.   https://s.click.aliexpress.com/e/_EJUewiX
+               Tutorial --> https://gist.github.com/gilankpam/d47555970d2e67f41ab062a30347a100
   
-       3. SHUNTS:
+       2. SHUNTS:
 
-          1. Junctek KG140F
-  
-       5. BMS:
+          1. Junctek KG140F.  https://s.click.aliexpress.com/e/_Ew3qJE3
+                Tutorial --> https://community.home-assistant.io/t/home-assistant-tasmota-wemos-mini-r1-battery-meter-kg140f/473969
 
-          1. JK BMS
+       3. BMS:
 
-                  - https://github.com/syssi/esphome-jk-bms/tree/main
+          1. JK BMS   https://s.click.aliexpress.com/e/_EIZ1VaT
+
+               Tutorial --> https://github.com/syssi/esphome-jk-bms/tree/main
 
     
