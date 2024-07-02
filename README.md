@@ -2,9 +2,11 @@
     - Computo:
        1. Raspberry pi (Se recomienda 3b o superior)
            https://s.click.aliexpress.com/e/_Ex8kmc7
-       3. Mini PC (tipo nuc)
+       2. Mini PC (tipo nuc)
+           https://s.click.aliexpress.com/e/_EH5ezVp
     - Conectividad:
         Router con conectividad redes móviles
+           https://s.click.aliexpress.com/e/_ExJmTjH
         Propio móvil
     -  Dispositivos:
         (En este punto entraría en juego las necesidades de cada uno y que queremos monitorizar/controlar)
