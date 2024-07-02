@@ -1,6 +1,8 @@
 1. Pre-requisitos
     - Computo:
-        Raspberry pi (Se recomienda 3b o superior) / Mini PC (tipo nuc)
+       1. Raspberry pi (Se recomienda 3b o superior)
+           https://s.click.aliexpress.com/e/_Ex8kmc7
+       3. Mini PC (tipo nuc)
     - Conectividad:
         Router con conectividad redes móviles
         Propio móvil
