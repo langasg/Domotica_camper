@@ -1,4 +1,4 @@
-81. Pre-requisitos
+1. Pre-requisitos
     - Computo:
        1. Raspberry pi (Se recomienda 3b o superior)
            Raspberry 4 4gb --> https://s.click.aliexpress.com/e/_EHGYk1H
@@ -62,3 +62,53 @@
                Tutorial --> https://github.com/syssi/esphome-jk-bms/tree/main
 
     
+############################################################################################################################################################################
+############################################################################################################################################################################
+
+
+NOTIFICACIONES
+
+    Uno de los puntos destacados de tener todo controlado desde un servidor es que podamos gestionar nsootros mismo las notificaciones, lo más comodo será uitlizar Telegram
+
+    Voy a intentar hacer un resumen en ambas plataformas (HA y openhab). 
+        1. Primero tenemos un bloque común a ambas, tenemos que crear un bot en telegram, es muy sencillo, nos vamos y buscamos en nuestros chats "BotFather", (estar atentos porque algunos piratillas qeu han copiado logo y nombre, se llama como he puesto ni una letra más ni menos y tienes un check azul), tras esto enviamos un "/start" para iniciar el chat con bot, y despues le enviamos "/newbot" para crear el nuevo bot. Nos pedirá el nombre que siempre debe terminar en "bot" y nos devolvera el token, el cual debemos copiarnos.
+        2. Configuración en nuestro server:
+            1. Openhab
+                1. Instalar binding: En Openhab solo tendremos que añadir el binding de telegram configurar el token y el chatid donde queremos que envie los mensajes.
+                2. Crear reglas qeu utilicen la funcion TelegramSend
+
+            2. Home Assistant
+                1. Modificamos el configuration.yaml con el siguiente bloque
+                        telegram_bot:
+                                platform: polling
+                                api_key: TOKEN_DEL_BOT
+                                allowed_chat_ids:
+                                - -ID_CHAT
+ 
+                                notify:
+                                - name: telegram
+                                platform: telegram
+                                api_key: TOKEN_DEL_BOT
+                                chat_id: -ID_CHAT
+
+            2. Creamos una automatización, puede ser tanto en modo grafico como con un yaml (automations.yaml)
+            - id: '1561334211255'
+             alias: Notificación Telegram - Puerta Garaje-Jardin Abierta
+             trigger:
+             - entity_id: binary_sensor.puerta_garaje_jardin
+             from: 'off'
+             platform: state
+             to: 'on'
+             condition:
+             - condition: state
+             entity_id: device_tracker.hector
+             state: not_home
+             - condition: state
+             entity_id: device_tracker.seila
+             state: not_home
+             action:
+             - data:
+             message: La puerta del Garaje-Jardin está abierta
+             service: notify.telegram
+                        
+            
