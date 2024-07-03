@@ -143,4 +143,4 @@ Este complemento nos proporcionara la posibilidad de crear un AP dodne se conect
     "hostapd_config_override": [],
     "client_internet_access": '1',
     "client_dns_override": ['1.1.1.1', '8.8.8.8']
-``
+```
