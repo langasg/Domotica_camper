@@ -6,9 +6,10 @@
        3. Mini PC (tipo nuc)
            https://s.click.aliexpress.com/e/_EH5ezVp
     - Conectividad:
-        Router con conectividad redes móviles
+        1. Router con conectividad redes móviles
            https://s.click.aliexpress.com/e/_ExJmTjH
-        Propio móvil
+        3. Propio móvil
+             Necesitaremos un usb wifi para poder conectar al wifi del movil y crear un AP, donde se conecten los dispositivos  <a target="_blank" href="https://www.amazon.es/EDiMAX-Adaptador-EW-7811UN-USB2-0-150MBPS/dp/B00EO4HMSQ/ref=sr_1_6?crid=CM6OJUK4Z943&amp;dib=eyJ2IjoiMSJ9.y9923hSu-AnlmMwVm7ip_Ir-8t9SmRknxYe6JHYvilZ_r89VUVKYYGJPnaDEyzKs5bWHZgKJtQhH8t1n_wT-Uzz1ASqazJbWDH1aQrInuylRaIBXyTd3PFO1HR2i65kfspWEsyxVLjWe5pIrZbSzLnR87QzXm6kmuG2Pcr1dQjo7LrxLsn2Io2mOY33KgQdfq8Dieqng1-jns_BBZo6EH0qWicVFC1BDhHZRwHR-G4sX2S_tAhKAvOz3emaXhQd1sxuCz-briBM6AdrXMxgfUiT9WVtgL1Unkj-8cUwD8Fs.Dw1rxxw4u1anR3Jrd9pHibCEDThPS5MXDaRLvpXv2CM&amp;dib_tag=se&amp;keywords=edimax+wifi&amp;qid=1720005659&amp;sprefix=edimax+wifi+%252Caps%252C109&amp;sr=8-6&_encoding=UTF8&tag=docamper-21&linkCode=ur2&linkId=98ef76e69c233e7964e67d725bf71676&camp=3638&creative=24630"> USB Wifi Edimax</a>
     -  Dispositivos:
         (En este punto entraría en juego las necesidades de cada uno y que queremos monitorizar/controlar)
        1. ESP32.  https://s.click.aliexpress.com/e/_Evd27Kb
