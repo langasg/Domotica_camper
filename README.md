@@ -10,6 +10,7 @@
            https://s.click.aliexpress.com/e/_ExJmTjH
            
         2. Propio móvil
+             Visitar la seccion --- CONFIGURACION COMPLEMENTO Hass.io Access Point
              Necesitaremos un usb wifi para poder conectar al wifi del movil y crear un AP, donde se conecten los dispositivos  <a target="_blank" href="https://www.amazon.es/EDiMAX-Adaptador-EW-7811UN-USB2-0-150MBPS/dp/B00EO4HMSQ/ref=sr_1_6?crid=CM6OJUK4Z943&amp;dib=eyJ2IjoiMSJ9.y9923hSu-AnlmMwVm7ip_Ir-8t9SmRknxYe6JHYvilZ_r89VUVKYYGJPnaDEyzKs5bWHZgKJtQhH8t1n_wT-Uzz1ASqazJbWDH1aQrInuylRaIBXyTd3PFO1HR2i65kfspWEsyxVLjWe5pIrZbSzLnR87QzXm6kmuG2Pcr1dQjo7LrxLsn2Io2mOY33KgQdfq8Dieqng1-jns_BBZo6EH0qWicVFC1BDhHZRwHR-G4sX2S_tAhKAvOz3emaXhQd1sxuCz-briBM6AdrXMxgfUiT9WVtgL1Unkj-8cUwD8Fs.Dw1rxxw4u1anR3Jrd9pHibCEDThPS5MXDaRLvpXv2CM&amp;dib_tag=se&amp;keywords=edimax+wifi&amp;qid=1720005659&amp;sprefix=edimax+wifi+%252Caps%252C109&amp;sr=8-6&_encoding=UTF8&tag=docamper-21&linkCode=ur2&linkId=98ef76e69c233e7964e67d725bf71676&camp=3638&creative=24630"> USB Wifi Edimax</a>
         3. Router con opcion de dongle 3G/4G
               Rouer  Mango --->https://s.click.aliexpress.com/e/_ExlCiwX
@@ -120,3 +121,26 @@ Uno de los puntos destacados de tener todo controlado desde un servidor es que p
              service: notify.telegram
            ```                        
             
+CONFIGURACION COMPLEMENTO Hass.io Access Point
+
+Este complemento nos proporcionara la posibilidad de crear un AP dodne se conecten nuestros dispositivos y a traves de otro adpatador de wifi nos conectaremos a nuestra salida a internet, lo que nos proporciona esto es poder salir por el wifi de cualquier movil. Para lo cual necesitaremos dos adapatadores de red, uno puede ser el propio de la raspberry pero necesitaremos uno externo, en la seccion de prerequisitos teneis la lista.
+
+```
+    "ssid": "AP-NAME",
+    "wpa_passphrase": "AP-PASSWORD",
+    "channel": "6",
+    "address": "192.168.10.1",
+    "netmask": "255.255.255.0",
+    "broadcast": "192.168.10.255",
+    "interface": "wlan0",
+    "hide_ssid": "1",
+    "dhcp": "1",
+    "dhcp_start_addr": "192.168.10.10",
+    "dhcp_end_addr": "192.168.10.20",
+    "allow_mac_addresses": [],
+    "deny_mac_addresses": ['ab:cd:ef:fe:dc:ba'],
+    "debug": "0",
+    "hostapd_config_override": [],
+    "client_internet_access": '1',
+    "client_dns_override": ['1.1.1.1', '8.8.8.8']
+``
