@@ -1,8 +1,8 @@
 1. Pre-requisitos
     - Computo:
        1. Raspberry pi (Se recomienda 3b o superior)
-           Raspberry 4 4gb --> https://s.click.aliexpress.com/e/_EHGYk1H
-                       8g. --> https://s.click.aliexpress.com/e/_EjRuZHv
+           1. Raspberry 4 4gb --> https://s.click.aliexpress.com/e/_EHGYk1H
+           2. Raspberry 4 8gb --> https://s.click.aliexpress.com/e/_EjRuZHv
        3. Mini PC (tipo nuc)
            https://s.click.aliexpress.com/e/_EH5ezVp
     - Conectividad:
