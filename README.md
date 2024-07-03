@@ -77,7 +77,7 @@ NOTIFICACIONES
                 1. Instalar binding: En Openhab solo tendremos que añadir el binding de telegram configurar el token y el chatid donde queremos que envie los mensajes.
                 2. Crear reglas qeu utilicen la funcion TelegramSend
 
-            2. Home Assistant
+            2. Home Assistant  -->  https://www.bujarra.com/enviando-alertas-de-telegram-con-home-assistant-o-hassio/
                 1. Modificamos el configuration.yaml con el siguiente bloque
                         telegram_bot:
                                 platform: polling
