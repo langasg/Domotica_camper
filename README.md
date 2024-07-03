@@ -71,13 +71,13 @@ NOTIFICACIONES
 Uno de los puntos destacados de tener todo controlado desde un servidor es que podamos gestionar nsootros mismo las notificaciones, lo más comodo será uitlizar Telegram
 
    Voy a intentar hacer un resumen en ambas plataformas (HA y openhab). 
-        1. Primero tenemos un bloque común a ambas, tenemos que crear un bot en telegram, es muy sencillo, nos vamos y buscamos en nuestros chats "BotFather", (estar atentos porque algunos piratillas qeu han copiado logo y nombre, se llama como he puesto ni una letra más ni menos y tienes un check azul), tras esto enviamos un "/start" para iniciar el chat con bot, y despues le enviamos "/newbot" para crear el nuevo bot. Nos pedirá el nombre que siempre debe terminar en "bot" y nos devolvera el token, el cual debemos copiarnos.
-        2. Configuración en nuestro server:
-            1. Openhab
-                1. Instalar binding: En Openhab solo tendremos que añadir el binding de telegram configurar el token y el chatid donde queremos que envie los mensajes.
-                2. Crear reglas qeu utilicen la funcion TelegramSend
-            2. Home Assistant  -->  https://www.bujarra.com/enviando-alertas-de-telegram-con-home-assistant-o-hassio/
-                1. Modificamos el configuration.yaml con el siguiente bloque
+   1. Primero tenemos un bloque común a ambas, tenemos que crear un bot en telegram, es muy sencillo, nos vamos y buscamos en nuestros chats "BotFather", (estar atentos porque algunos piratillas qeu han copiado logo y nombre, se llama como he puesto ni una letra más ni menos y tienes un check azul), tras esto enviamos un "/start" para iniciar el chat con bot, y despues le enviamos "/newbot" para crear el nuevo bot. Nos pedirá el nombre que siempre debe terminar en "bot" y nos devolvera el token, el cual debemos copiarnos.
+   2. Configuración en nuestro server:
+      1. Openhab
+         1. Instalar binding: En Openhab solo tendremos que añadir el binding de telegram configurar el token y el chatid donde queremos que envie los mensajes.
+         2. Crear reglas qeu utilicen la funcion TelegramSend
+      2. Home Assistant  -->  https://www.bujarra.com/enviando-alertas-de-telegram-con-home-assistant-o-hassio/
+         1. Modificamos el configuration.yaml con el siguiente bloque
                         telegram_bot:
                                                 
                                 platform: polling
@@ -92,8 +92,8 @@ Uno de los puntos destacados de tener todo controlado desde un servidor es que p
                                 chat_id: -ID_CHAT
                         
                        
-2. Creamos una automatización, puede ser tanto en modo grafico como con un yaml (automations.yaml)
-```
+         2. Creamos una automatización, puede ser tanto en modo grafico como con un yaml (automations.yaml)
+         ```
            - id: '1561334211255'
              alias: Notificación Telegram - Puerta Garaje-Jardin Abierta
              trigger:
@@ -112,5 +112,5 @@ Uno de los puntos destacados de tener todo controlado desde un servidor es que p
              - data:
              message: La puerta del Garaje-Jardin está abierta
              service: notify.telegram
-```                        
+           ```                        
             
