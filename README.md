@@ -166,5 +166,5 @@ Este complemento nos proporcionara la posibilidad de crear un AP dodne se conect
 
    Simplemente conectas el termómetro configuras en la parte baja de la web y flasheas, puedes ajustar intervalo y alguna cosilla más, pero sencillo.
 
-     https://docs.openmqttgateway.com/upload/web-install.html
+      https://docs.openmqttgateway.com/upload/web-install.html
    Página para instalar openmqtt en un esp32, hay que elegir la opción esp32dev-ble, después te conectas al wifi que crea y ya le configuras tu wifi y tu servidor mqtt.
