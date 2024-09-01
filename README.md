@@ -67,7 +67,11 @@
           1. JK BMS   https://s.click.aliexpress.com/e/_EIZ1VaT
 
                Tutorial --> https://github.com/syssi/esphome-jk-bms/tree/main
-
+     
+       4. Openmqttgateway
+           1. Theemometro Xiaomi miija. https://s.click.aliexpress.com/e/_EHCHgyt 
+           
+       5. 
     
 ############################################################################################################################################################################
 ############################################################################################################################################################################
@@ -144,3 +148,20 @@ Este complemento nos proporcionara la posibilidad de crear un AP dodne se conect
     "client_internet_access": '1',
     "client_dns_override": ['1.1.1.1', '8.8.8.8']
 ```
+
+
+
+Proceso configuracion Termometros Xiaomi bluetooth
+Lo que he tenido que hacer es flashear los termómetros con un firmware especial y luego un esp32 le instalas el openmqttgateway y lo configurar contra tu servidor mqtt y ya haces lo que necesites.
+
+https://s.click.aliexpress.com/e/_EHCHgyt
+
+En mi caso son estos pero hay que ver cuales son compatibles con openmqttgateway que en su web hay muchos
+
+Página para flashear el termómetro 
+https://atc1441.github.io/TelinkFlasher.html
+
+Simplemente conectas el termómetro configuras en la parte baja de la web y flasheas, puedes ajustar intervalo y alguna cosilla más, pero sencillo.
+
+https://docs.openmqttgateway.com/upload/web-install.html
+Página para instalar openmqtt en un esp32, hay que elegir la opción esp32dev-ble, después te conectas al wifi que crea y ya le configuras tu wifi y tu servidor mqtt.
