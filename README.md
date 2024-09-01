@@ -77,7 +77,7 @@
 ############################################################################################################################################################################
 
 
-NOTIFICACIONES
++ NOTIFICACIONES
 
 Uno de los puntos destacados de tener todo controlado desde un servidor es que podamos gestionar nsootros mismo las notificaciones, lo más comodo será uitlizar Telegram
 
@@ -125,7 +125,7 @@ Uno de los puntos destacados de tener todo controlado desde un servidor es que p
              service: notify.telegram
            ```                        
             
-CONFIGURACION COMPLEMENTO Hass.io Access Point
++ CONFIGURACION COMPLEMENTO Hass.io Access Point
 
 Este complemento nos proporcionara la posibilidad de crear un AP dodne se conecten nuestros dispositivos y a traves de otro adpatador de wifi nos conectaremos a nuestra salida a internet, lo que nos proporciona esto es poder salir por el wifi de cualquier movil. Para lo cual necesitaremos dos adapatadores de red, uno puede ser el propio de la raspberry pero necesitaremos uno externo, en la seccion de prerequisitos teneis la lista.
 
@@ -151,7 +151,9 @@ Este complemento nos proporcionara la posibilidad de crear un AP dodne se conect
 
 
 
-Proceso configuracion Termometros Xiaomi bluetooth
++ Proceso configuracion Termometros Xiaomi bluetooth
+
+
    Lo que he tenido que hacer es flashear los termómetros con un firmware especial y luego un esp32 le instalas el openmqttgateway y lo configurar contra tu servidor mqtt y ya haces lo que necesites.
 
        https://s.click.aliexpress.com/e/_EHCHgyt
@@ -159,6 +161,7 @@ Proceso configuracion Termometros Xiaomi bluetooth
    En mi caso son estos pero hay que ver cuales son compatibles con openmqttgateway que en su web hay muchos
 
    Página para flashear el termómetro 
+   
       https://atc1441.github.io/TelinkFlasher.html
 
    Simplemente conectas el termómetro configuras en la parte baja de la web y flasheas, puedes ajustar intervalo y alguna cosilla más, pero sencillo.
