@@ -71,7 +71,13 @@
        4. Openmqttgateway
            1. Theemometro Xiaomi miija. https://s.click.aliexpress.com/e/_EHCHgyt 
            
-       5. 
+       5. Victron 
+          Para poder controlar dispositivos victron contamos con el siguiente repositorio que nos permitira su control gracias al usa de un esp.
+          https://github.com/Fabian-Schmidt/esphome-victron_ble
+
+          
+          
+          
     
 ############################################################################################################################################################################
 ############################################################################################################################################################################
