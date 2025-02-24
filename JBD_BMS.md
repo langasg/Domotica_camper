@@ -11,7 +11,7 @@ Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.gi
 
 TUTORIAL
 1. Instalar python --> (https://www.python.org/downloads/)
-2. Instalar esphome Ejecutar en un terminal de pip3 install esphome
+2. Instalar esphome. Ejecutar en un terminal de pip3 install esphome
 
          pip install esphome
    
