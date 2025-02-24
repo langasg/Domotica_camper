@@ -23,7 +23,7 @@ TUTORIAL
          cd esphome-jbd-bms
    
 7. Modificar fichero  esp32-ble-example.yaml
-8. Debermos modificar  mac, datos wifi, version protocol, añadir AP.
+   Deberemos modificar  mac, datos wifi, version protocol, añadir AP.
    
    MAC: BUscamos la linea y modificamos con nuestra MAC
    
