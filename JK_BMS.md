@@ -1,7 +1,7 @@
 Grupo Telegram --> https://t.me/domotica_camper
 
-
 JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 
 Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jk-bms/tree/main
 
