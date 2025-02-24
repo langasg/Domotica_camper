@@ -74,4 +74,7 @@ TUTORIAL
 9. Ejecutar en un terminal.
 
             esphome run esp32-ble-example.yaml
+  o
+  
+            esphome run esp32-ble-jbd-ap.yaml
 
