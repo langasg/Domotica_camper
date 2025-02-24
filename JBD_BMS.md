@@ -55,7 +55,7 @@ TUTORIAL
                 password: MY_PASSWORD
                 ap:
                   ssid: AP_BMS
-                  password: BMS
+                  password: JBDBMS00
           
    
    MQTT: Si no vas a usar MQTT o no sabes lo que es, dejar las lineas como se muestran a continuación.
