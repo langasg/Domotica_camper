@@ -20,6 +20,9 @@ TUTORIAL
           
           pip3 install wheel
           pip3 install esphome
+   Para comprobar la correcta instalación podemos ejecutar
+
+          esphome --version
    
 5. Instalar git  --> (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
      Link de descarga Windows --> (https://git-scm.com/downloads/win)  
