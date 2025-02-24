@@ -19,8 +19,9 @@ TUTORIAL
 
          pip install esphome
    
-4. Instalar git  --> (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) 
-5. Descargar Repositorio  --->git clone https://github.com/syssi/esphome-jbd-bms.git
+4. Instalar git  --> (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+     Link de descarga Windows --> (https://git-scm.com/downloads/win)  
+6. Descargar Repositorio  --->git clone https://github.com/syssi/esphome-jbd-bms.git
      En un terminal ejecutamos
    
          git clone https://github.com/syssi/esphome-jbd-bms.git
