@@ -34,7 +34,7 @@ TUTORIAL
      Link de descarga Windows --> (https://git-scm.com/downloads/win)  
       
 
-6.  Descargar (https://github.com/langasg/Domotica_camper/blob/main/esp_jk_ble_ap.yaml) modificar la mac y la configuración WiFi.
+6.  Descargar (https://github.com/langasg/Domotica_camper/blob/main/esp_jk_ble_ap.yaml) modificar la mac (linea 5) y la configuración WiFi (linea 28 a 33).
    
 9. Ejecutar en un terminal.
  
