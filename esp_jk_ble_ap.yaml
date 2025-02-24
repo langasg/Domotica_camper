@@ -28,7 +28,6 @@ external_components:
 wifi:
   ssid: TP_LINK #Modificar con la red wifi a la que se quiera conectar
   password: password # Modificar con la password
-
   ap:
     ssid: esp32_AP #Modificar con el nombre de WIFI.
     password: password #Modificar con la password
