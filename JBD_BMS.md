@@ -10,7 +10,7 @@ Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.gi
 
 
 TUTORIAL
-1. Instalar python --> (https://www.python.org/downloads/)
+1. Instalar python --> (https://www.python.org/downloads/) - Para lospuntos1y 2 (https://esphome.io/guides/installing_esphome.html)
     Para comprobar la correcta instalación, podemos abrir un terminal y ejecutar
 
          python --version
