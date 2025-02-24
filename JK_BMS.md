@@ -17,5 +17,5 @@ TUTORIAL
 
 
 
-Para los BMS JBD el preoceso es el mismo pero se debe realizar bajando el repo de https://github.com/syssi/esphome-jbd-bms.git
+Para los BMS JBD el proceso es el mismo pero se debe realizar bajando el repo de https://github.com/syssi/esphome-jbd-bms.git
 Lo podemos hacer con el comando --> git clone https://github.com/syssi/esphome-jbd-bms.git
