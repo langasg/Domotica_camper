@@ -59,7 +59,7 @@ TUTORIAL
                   password: JBDBMS00
           
    
-   MQTT: Si no vas a usar MQTT o no sabes lo que es, dejar las lineas como se muestran a continuación.
+   MQTT: Si no vas a usar MQTT o no sabes lo que es, dejar las lineas como se muestran a continuación. Si quieres conectar con Openhab o Home assistant tendras que quitar la # y modificar las variables con tu configuracion del MQTT.
    
          
              #mqtt:
