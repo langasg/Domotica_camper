@@ -1,6 +1,6 @@
 JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
 
-Repo fuente --> https://github.com/syssi/esphome-jk-bms/tree/main
+Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jk-bms/tree/main
 
 
 
