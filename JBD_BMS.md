@@ -26,7 +26,7 @@ TUTORIAL
 
    Deberemos modificar  mac, datos wifi, version protocol, añadir AP.
    
-   MAC: BUscamos la linea y modificamos con nuestra MAC
+   MAC: Buscamos la linea y modificamos con nuestra MAC
    
           
               mac_address: 70:3e:97:07:c0:3e
@@ -43,7 +43,7 @@ TUTORIAL
                   password: BMS
           
    
-   MQTT: Si no lo vamos a usar comentamos las lineas
+   MQTT: Si no vas a usar MQTT o no sabes que es dejar las lineas como se muestran a continuación.
    
          
              #mqtt:
