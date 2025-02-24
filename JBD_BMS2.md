@@ -7,8 +7,8 @@ ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jbd-bms.git
 
 TUTORIAL
+Pensado unicamente para bloquear el acceso por Bluetooth a la BMS, Si quieres conectar el bms a Home assistant o Openhab no uses este manual.
 
-TUTORIAL
 1. Instalar python --> (https://www.python.org/downloads/) - Para los puntos 1 y 2 (https://esphome.io/guides/installing_esphome.html)
     Para comprobar la correcta instalación, podemos abrir un terminal y ejecutar
 
