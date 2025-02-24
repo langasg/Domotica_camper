@@ -14,11 +14,14 @@ TUTORIAL
 4. Descargar Repositorio  ---> git clone https://github.com/syssi/esphome-jbd-bms.git
 5. Modificar fichero  esp32-ble-example.yaml
 6. Debermos modificar  mac, datos wifi, version protocol, añadir AP.
+   
        - MAC: BUscamos la linea y modificamos con nuestra MAC
           ```
               mac_address: 70:3e:97:07:c0:3e
           ```
+   
        - WIFI: Buscamos el bloque de wifi: y cambiamos las lineas que hay por
+   
           ```
               wifi:
                 ssid: MY_WIFI
@@ -27,14 +30,17 @@ TUTORIAL
                   ssid: AP_BMS
                   password: BMS
           ```
+   
        - MQTT: Si no lo vamos a usar comentamos las lineas
+   
           ```
              #mqtt:
              #  broker: !secret mqtt_host
              #  username: !secret mqtt_username
              #  password: !secret mqtt_password
              #  id: mqtt_client
-          ```       
+          ```
+   
 8. Ejecutar en un terminal.   esphome run esp_jk_ble_ap.yaml
 
 
