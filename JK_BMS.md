@@ -34,8 +34,8 @@ TUTORIAL
      Link de descarga Windows --> (https://git-scm.com/downloads/win)  
       
 
-6.  Descargar (https://github.com/langasg/Domotica_camper/blob/main/esp32-ble-jk-ap.yaml) modificar la mac y la configuración WiFi.
+6.  Descargar (https://github.com/langasg/Domotica_camper/blob/main/esp_jk_ble_ap.yaml) modificar la mac y la configuración WiFi.
    
 9. Ejecutar en un terminal.
  
-            esphome run esp32-ble-jk-ap.yaml
+            esphome run esp_jk_ble_ap.yaml
