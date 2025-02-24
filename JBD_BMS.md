@@ -43,7 +43,7 @@ TUTORIAL
                   password: BMS
           
    
-   MQTT: Si no vas a usar MQTT o no sabes que es dejar las lineas como se muestran a continuación.
+   MQTT: Si no vas a usar MQTT o no sabes lo que es, dejar las lineas como se muestran a continuación.
    
          
              #mqtt:
