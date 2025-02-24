@@ -23,6 +23,11 @@ TUTORIAL
    Para comprobar la correcta instalación podemos ejecutar
 
           esphome --version
+
+   Si no reconce el comando esphome podemos intentar instalarlo de nuevo con el siguiente comando.
+
+          python -m install wheel
+          python -m install esphome
    
 5. Instalar git  --> (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
      Link de descarga Windows --> (https://git-scm.com/downloads/win)  
