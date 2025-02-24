@@ -9,5 +9,5 @@ Repo fuente --> https://github.com/syssi/esphome-jk-bms/tree/main
 TUTORIAL
 
 2. Descargar fichero .yaml
-3. Modificar mac, datos wifi, version protocol, añadir AP
+3. Modificar mac, datos wifi, version protocol, añadir AP. Se han añadido comentarios en los parametros a modificar.
 4. Flashear esp con nuevo fichero .yaml ---> https://web.esphome.io/
