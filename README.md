@@ -1,4 +1,5 @@
-Grupo Telegram --> 
+Grupo Telegram --> https://t.me/domotica_camper
+
 1. Pre-requisitos
     - Computo:
        1. Raspberry pi (Se recomienda 3b o superior)
