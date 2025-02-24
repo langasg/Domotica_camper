@@ -14,3 +14,4 @@ TUTORIAL
 4. Descargar fichero .yaml ---> https://github.com/langasg/Domotica_camper/blob/main/esp_jk_ble_ap.yaml
 5. Modificar mac, datos wifi, version protocol, añadir AP. Se han añadido comentarios en los parametros a modificar.
 6. Ejecutar en un terminal.   esphome run esp_jk_ble_ap.yaml
+
