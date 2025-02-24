@@ -50,5 +50,5 @@ TUTORIAL
              #  id: mqtt_client
        
    
-8. Ejecutar en un terminal.   esphome run esp_jk_ble_ap.yaml
+8. Ejecutar en un terminal.   esphome run esp32-ble-example.yaml
 
