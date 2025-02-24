@@ -2,7 +2,7 @@ substitutions:
   name: jk-bms
   device_description: "Monitor and control a JK-BMS via bluetooth"
   external_components_source: github://syssi/esphome-jk-bms@main
-  mac_address: C8:47:8C:E1:E2:AA
+  mac_address: C8:47:8C:E1:E2:AA #Modificar con la MAC del BMs
   # Please use "JK02_24S" if you own a old JK-BMS < hardware version 11.0 (hardware version >= 6.0 and < 11.0)
   # Please use "JK02_32S" if you own a new JK-BMS >= hardware version 11.0 (f.e. JK-B2A8S20P hw 11.XW, sw 11.26)
   # Please use "JK04" if you have some old JK-BMS <= hardware version 3.0 (f.e. JK-B2A16S hw 3.0, sw. 3.3.0)
@@ -26,8 +26,12 @@ external_components:
     refresh: 0s
 
 wifi:
-  ssid: <WIFI SSID>
-  password: <WIFI PASSWORD>
+  ssid: TP_LINK #Modificar con la red wifi a la que se quiera conectar
+  password: password # Modificar con la password
+
+  ap:
+    ssid: esp32_AP #Modificar con el nombre de WIFI.
+    password: password #Modificar con la password
 
 ota:
   platform: esphome
