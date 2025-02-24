@@ -10,10 +10,18 @@ Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jk-bms/tree
 TUTORIAL
 1. Instalar python --> https://www.python.org/downloads/
 2. Instalar esphome Ejecutar en un terminal de pip3 install esphome
-3. Instalar git  --> https://git-scm.com/book/en/v2/Getting-Started-Installing-Git 
-4. Descargar Repositorio  ---> git clone https://github.com/syssi/esphome-jbd-bms.git
-5. Modificar fichero  esp32-ble-example.yaml
-6. Debermos modificar  mac, datos wifi, version protocol, añadir AP.
+
+         pip install esphome
+   
+4. Instalar git  --> https://git-scm.com/book/en/v2/Getting-Started-Installing-Git 
+5. Descargar Repositorio  ---> git clone https://github.com/syssi/esphome-jbd-bms.git
+     En un terminal ejecutamos
+   
+         git clone https://github.com/syssi/esphome-jbd-bms.git
+         cd esphome-jbd-bms
+   
+6. Modificar fichero  esp32-ble-example.yaml
+7. Debermos modificar  mac, datos wifi, version protocol, añadir AP.
    
    MAC: BUscamos la linea y modificamos con nuestra MAC
    
@@ -44,7 +52,3 @@ TUTORIAL
    
 8. Ejecutar en un terminal.   esphome run esp_jk_ble_ap.yaml
 
-
-
-Para los BMS JBD el proceso es el mismo pero se debe realizar bajando el repo de https://github.com/syssi/esphome-jbd-bms.git
-Lo podemos hacer con el comando --> git clone https://github.com/syssi/esphome-jbd-bms.git
