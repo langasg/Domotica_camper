@@ -1,6 +1,7 @@
 Grupo Telegram --> https://t.me/domotica_camper
 
 JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+
 ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 
 Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
@@ -8,12 +9,12 @@ Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.gi
 
 
 TUTORIAL
-1. Instalar python --> https://www.python.org/downloads/
+1. Instalar python --> (https://www.python.org/downloads/)
 2. Instalar esphome Ejecutar en un terminal de pip3 install esphome
 
          pip install esphome
    
-4. Instalar git  --> https://git-scm.com/book/en/v2/Getting-Started-Installing-Git 
+4. Instalar git  --> (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) 
 5. Descargar Repositorio  --->git clone https://github.com/syssi/esphome-jbd-bms.git
      En un terminal ejecutamos
    
