@@ -18,8 +18,8 @@ TUTORIAL
 3. Instalar esphome. Ejecutar en un terminal de pip3 install esphome
 
           
-          pip3 install esphome
           pip3 install wheel
+          pip3 install esphome
    
 5. Instalar git  --> (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
      Link de descarga Windows --> (https://git-scm.com/downloads/win)  
