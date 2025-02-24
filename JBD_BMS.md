@@ -28,7 +28,8 @@ TUTORIAL
 
           python -m install wheel
           python -m install esphome
-   
+
+ 
 5. Instalar git  --> (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
      Link de descarga Windows --> (https://git-scm.com/downloads/win)  
 6. Descargar Repositorio  --->git clone https://github.com/syssi/esphome-jbd-bms.git
@@ -67,6 +68,8 @@ TUTORIAL
              #  password: !secret mqtt_password
              #  id: mqtt_client
        
+
+7.b   Un ejemplo de como quedaria el codigo finalmente serí el del siguiente link , (https://github.com/langasg/Domotica_camper/blob/main/esp32-ble-jbd-ap.yaml) de hecho podriais bajar este fichero unicamente y modificar la mac y la configuración WiFi.
    
 9. Ejecutar en un terminal.
 
