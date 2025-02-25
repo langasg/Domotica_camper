@@ -74,11 +74,12 @@ Grupo Telegram --> https://t.me/domotica_camper
            1. Theemometro Xiaomi miija. https://s.click.aliexpress.com/e/_EHCHgyt 
            
        5. Victron 
-          Para poder controlar dispositivos victron contamos con el siguiente repositorio que nos permitira su control gracias al usa de un esp.
+          Para poder controlar dispositivos victron contamos con el siguiente repositorio que nos permitira su control gracias al uso de un esp.
           https://github.com/Fabian-Schmidt/esphome-victron_ble
 
+          Sin necesidad de esp32, directamente conectando con el bluetooth de la propia raspberry.
           
-          
+               https://github.com/SWW13/homeassistant-victron-ir-ble
           
     
 ############################################################################################################################################################################
