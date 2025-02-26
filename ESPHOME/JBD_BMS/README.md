@@ -7,11 +7,9 @@ TUTORIAL
 2. Llegados a este punto tenemos varias opciones segúnla necesidad de conectar el BMS a Home Assistant o simplemente bloquear el acceso al Bluetooth
 
      - Conectividad con Home Assistant
-        - Mediante Cable
-      
-        - Mediante Bluetooth
+        - Mediante Cable --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/JBD_BMS_HA.md)
+        - Mediante Bluetooth --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/JBD_BMS_HA_ble.md)
            
-  
-     - Bloqueo de Bluetooth
+     - Bloqueo de Bluetooth --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/JB_BMS_block_traffic.md) 
   
         
