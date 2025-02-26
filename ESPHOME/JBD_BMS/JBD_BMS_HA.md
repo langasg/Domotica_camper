@@ -8,6 +8,7 @@ ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
 
 
+
 Pasos previos
 
 Preparacion del entorno (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Preparacion_entorno.md)
