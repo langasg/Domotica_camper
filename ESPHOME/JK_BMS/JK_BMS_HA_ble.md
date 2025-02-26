@@ -24,7 +24,18 @@ TUTORIAL
    Deberemos modificar  MAC del BMS BLuetooth (linea 5)
 
 
-3. Ejecutar en un terminal, estando en la carpeta donde se encuentre los ficheros yaml.
+3. Debemos crear un fichero con nombre secret.yaml en la misma ruta donde tengamos el fichero esp32-ble-example.yaml
+
+       wifi_ssid: MY_WIFI_SSID
+       wifi_password: MY_WIFI_PASSWORD
+
+       mqtt_host: MY_MQTT_HOST #IP del Servidor MQTT de Home Assistant
+       mqtt_username: MY_MQTT_USERNAME
+       mqtt_password: MY_MQTT_PASSWORD
+   
+
+
+4. Ejecutar en un terminal, estando en la carpeta donde se encuentre los ficheros yaml.
 
             esphome run esp32-ble-example.yaml
 
