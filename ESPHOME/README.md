@@ -4,4 +4,4 @@ TUTORIAL
   
    (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Preparacion_entorno.md)
 
-4. 
+2. 
