@@ -19,9 +19,16 @@ TUTORIAL
 1. Descargar YAML  ---> (https://github.com/syssi/esphome-jk-bms/blob/main/esp32-example.yaml)
 
    
-2. Modificar fichero  esp32-example.yaml
 
-   Deberemos modificar  MAC del BMS BLuetooth (linea 5)
+3. Debemos crear un fichero con nombre secret.yaml en la misma ruta donde tengamos el fichero esp32-example.yaml
+
+       wifi_ssid: MY_WIFI_SSID
+       wifi_password: MY_WIFI_PASSWORD
+
+       mqtt_host: MY_MQTT_HOST #IP del Servidor MQTT de Home Assistant
+       mqtt_username: MY_MQTT_USERNAME
+       mqtt_password: MY_MQTT_PASSWORD
+   
 
 
 3. Ejecutar en un terminal, estando en la carpeta donde se encuentre los ficheros yaml.
