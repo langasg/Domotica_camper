@@ -5,7 +5,7 @@ TUTORIAL
    (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Preparacion_entorno.md)
 
 
-Llegados a este punto ya podremos realizar el flasheo del esp32 para ello debemos conectar el esp32 a nuestro pc y seguir el tutorial especifico de lo que queremos flashear.
+2. Llegados a este punto ya podremos realizar el flasheo del esp32 para ello debemos conectar el esp32 a nuestro pc y seguir el tutorial especifico de lo que queremos flashear.
 
 [JBD BMS](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/README.md)
 
