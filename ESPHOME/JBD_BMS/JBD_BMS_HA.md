@@ -10,7 +10,7 @@ Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.gi
 
 Pasos previos
 
-  Preparacion del entorno (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Preparacion_entorno.md)
+Preparacion del entorno (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Preparacion_entorno.md)
 
 TUTORIAL
 
