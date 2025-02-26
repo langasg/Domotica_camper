@@ -7,6 +7,10 @@ TUTORIAL
 2. Llegados a este punto tenemos varias opciones segúnla necesidad de conectar el BMS a Home Assistant o simplemente bloquear el acceso al Bluetooth
 
      - Conectividad con Home Assistant
+        - Mediante Cable
+      
+        - Mediante Bluetooth
+           
   
      - Bloqueo de Bluetooth
   
