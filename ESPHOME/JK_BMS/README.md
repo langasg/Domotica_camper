@@ -8,7 +8,7 @@ TUTORIAL
 
      - Conectividad con Home Assistant
         - Mediante Cable --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/JK_BMS.md)
-        - Mediante Bluetooth --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/JK_BMS.md)
+        - Mediante Bluetooth --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/JK_BMS_ble_block_traffic.md)
 
      - Bloqueo de Bluetooth -->  (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/JK_BMS_ble_block_traffic.md))
       
