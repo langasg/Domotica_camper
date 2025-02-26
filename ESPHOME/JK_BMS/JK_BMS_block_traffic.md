@@ -5,7 +5,7 @@ JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
 
 ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 
-Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
+Repo fuente (Source Repository) --> (https://github.com/syssi/esphome-jk-bms/tree/main)
 
 
 
@@ -16,7 +16,7 @@ Preparacion del entorno (https://github.com/langasg/Domotica_camper/blob/main/ES
 TUTORIAL
 
 
-1. Descargar YAML  ---> [https://github.com/syssi/esphome-jbd-bms/blob/main/esp32-ble-example.yaml](https://github.com/syssi/esphome-jk-bms/blob/main/yaml-snippets/esp32-ble-block-traffic.yaml)
+1. Descargar YAML  ---> (https://github.com/syssi/esphome-jk-bms/blob/main/yaml-snippets/esp32-ble-block-traffic.yaml)
 
    
 2. Modificar fichero  esp32-ble-block-traffic.yaml
