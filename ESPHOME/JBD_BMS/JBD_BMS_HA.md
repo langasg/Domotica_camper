@@ -19,9 +19,6 @@ TUTORIAL
 1. Descargar YAML  ---> (https://github.com/syssi/esphome-jbd-bms/blob/main/esp32-example.yaml)
 
    
-2. Modificar fichero  esp32-ble-example.yaml
-
-   Deberemos modificar  MAC del BMS BLuetooth (linea 5)
 
 3. Debemos crear un fichero con nombre secret.yaml en la misma ruta donde tengamos el fichero esp32-example.yaml
 
