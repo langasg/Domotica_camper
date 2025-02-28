@@ -1,0 +1,58 @@
+esphome:
+  name: espcamera1
+  friendly_name: espcamera1
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: ""
+
+ota:
+  - platform: esphome
+    password: "password"
+
+wifi:
+  ssid: "TP-LINK_POCKET"
+  password: "password"
+  fast_connect: True
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Espcamera1 Fallback Hotspot"
+    password: "password"
+
+captive_portal:
+
+esp32_camera:
+  external_clock:
+    pin: GPIO0
+    frequency: 20MHz
+  i2c_pins:
+    sda: GPIO26
+    scl: GPIO27
+  data_pins: [GPIO5, GPIO18, GPIO19, GPIO21, GPIO36, GPIO39, GPIO34, GPIO35]
+  vsync_pin: GPIO25
+  href_pin: GPIO23
+  pixel_clock_pin: GPIO22
+  power_down_pin: GPIO32
+  name: Camara
+
+# Luz/flash de la camara
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: gpio_4
+
+# Entidad (interruptor) para Home Assistant (opcional)   
+light:
+  - platform: binary
+    output: gpio_4
+    name: Luz camara
