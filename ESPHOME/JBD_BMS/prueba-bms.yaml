@@ -2,7 +2,7 @@ substitutions:
    name: "bateria-bms"
    device_description: "Monitor Battery "
    external_components_source: github://syssi/esphome-jbd-bms@main
-   mac_address: a5:c2:37:2e:27:e6
+   mac_address: a5:d2:37:2e:27:b6
 
 esphome:
    name: ${name}
