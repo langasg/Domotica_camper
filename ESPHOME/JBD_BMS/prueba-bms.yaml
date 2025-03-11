@@ -23,23 +23,23 @@ external_components:
 
 wifi:
   networks:
-  - ssid: "4G-MIFI-421"
-    password: "d20121977"
+  - ssid: "MI_WIFI"
+    password: "PASSWORD"
 
   ap: #Esto es para que el ESP cree un AP de conexión en caso de no poderse conectar al WIFI configurado
-    ssid: "Prueba-Pantalla-2"
-    password: "ZnwXjR0WxGal"
+    ssid: "AP_BMS"
+    password: "APBMS00."
 
 web_server:
    port: 80
 
 api:
    encryption:
-      key: "dCV+c5Gu4gHZhmCB7PuYwOUmH7EbD3N8ZUervA/Cifk="
+      key: "" # API de HomeAssistant, si no tienes Home Assistant puedes eliminar el bloque api
 
 ota:
    - platform: esphome
-     password: "a59526e967fa0917570c14ca108bc45f"
+     password: "" #Password para actualizar mediante wifi, se puede eliminar el bloque
 
 logger:
    level: DEBUG
