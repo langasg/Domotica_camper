@@ -1,5 +1,5 @@
 substitutions:
-   name: "david"
+   name: "esp32_jbd"
    device_description: "Monitor Battery "
    external_components_source: github://syssi/esphome-jbd-bms@main
    mac_address: a5:c2:37:2e:27:e6
@@ -20,27 +20,6 @@ esp32:
 external_components:
    - source: ${external_components_source}
      refresh: 0s
-
-#wifi:
-  #networks:
-  #- ssid: "4G-MIFI-421"
-    #password: "d20121977"
-
-  #ap: #Esto es para que el ESP cree un AP de conexión en caso de no poderse conectar al WIFI configurado
-    #ssid: "Prueba-Pantalla-2"
-    #password: "ZnwXjR0WxGal"
-
-#web_server:
-  
-
-#api:
-   #encryption:
-      #key: "dCV+c5Gu4gHZhmCB7PuYwOUmH7EbD3N8ZUervA/Cifk="
-
-#ota:
-   #- platform: esphome
-     #password: "a59526e967fa0917570c14ca108bc45f"
-
 logger:
    baud_rate: 921600
 
