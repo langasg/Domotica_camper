@@ -33,13 +33,13 @@ wifi:
 web_server:
    port: 80
 
-api:
-   encryption:
-      key: "" # API de HomeAssistant, si no tienes Home Assistant puedes eliminar el bloque api
+#api:
+#   encryption:
+#      key: "" # API de HomeAssistant, si no tienes Home Assistant puedes eliminar el bloque api
 
-ota:
-   - platform: esphome
-     password: "" #Password para actualizar mediante wifi, se puede eliminar el bloque
+#ota:
+#   - platform: esphome
+#     password: "" #Password para actualizar mediante wifi, se puede eliminar el bloque
 
 logger:
    level: DEBUG
