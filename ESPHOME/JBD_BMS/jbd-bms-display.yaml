@@ -1,8 +1,8 @@
 substitutions:
-   name: "bateria-bms"
+   name: "david"
    device_description: "Monitor Battery "
    external_components_source: github://syssi/esphome-jbd-bms@main
-   mac_address: a5:d2:37:2e:27:b6
+   mac_address: a5:c2:37:2e:27:e6
 
 esphome:
    name: ${name}
@@ -21,28 +21,32 @@ external_components:
    - source: ${external_components_source}
      refresh: 0s
 
-wifi:
-  networks:
-  - ssid: "MI_WIFI"
-    password: "PASSWORD"
+#wifi:
+  #networks:
+  #- ssid: "4G-MIFI-421"
+    #password: "d20121977"
 
-  ap: #Esto es para que el ESP cree un AP de conexión en caso de no poderse conectar al WIFI configurado
-    ssid: "AP_BMS"
-    password: "APBMS00."
+  #ap: #Esto es para que el ESP cree un AP de conexión en caso de no poderse conectar al WIFI configurado
+    #ssid: "Prueba-Pantalla-2"
+    #password: "ZnwXjR0WxGal"
 
-web_server:
-   port: 80
+#web_server:
+  
 
 #api:
-#   encryption:
-#      key: "" # API de HomeAssistant, si no tienes Home Assistant puedes eliminar el bloque api
+   #encryption:
+      #key: "dCV+c5Gu4gHZhmCB7PuYwOUmH7EbD3N8ZUervA/Cifk="
 
 #ota:
-#   - platform: esphome
-#     password: "" #Password para actualizar mediante wifi, se puede eliminar el bloque
+   #- platform: esphome
+     #password: "a59526e967fa0917570c14ca108bc45f"
 
 logger:
-   level: DEBUG
+   baud_rate: 921600
+
+psram:
+  mode: octal
+  speed: 80MHz
 
 esp32_ble_tracker:
    scan_parameters:
@@ -62,30 +66,89 @@ i2c:
    scl: GPIO22
    scan: true
 
+#spi:
+#   - id: spi_tft
+#     clk_pin: GPIO14
+#     mosi_pin: GPIO13
+#     miso_pin: GPIO12
+#
+#display:
+#   - platform: ili9xxx
+#     rotation: 270
+#     id: my_display
+#     model: TFT 2.4
+#     spi_id: spi_tft
+#     cs_pin: 15
+#     dc_pin: 2
+#     color_palette: 8BIT
+#     invert_colors: false
+
+# Configurción pantalla táctil
+touchscreen:
+  platform: xpt2046
+  id: my_touch
+  spi_id: spi_touch
+  cs_pin: GPIO33
+  interrupt_pin: GPIO36
+  calibration:
+    x_min: 281
+    x_max: 3848
+    y_min: 347
+    y_max: 3878
+  transform:
+    swap_xy: true
+    mirror_x: false
+    mirror_y: false
+  on_release:
+      - if:
+          condition: lvgl.is_paused
+          then:
+            - logger.log: "LVGL resuming"
+            - lvgl.resume:
+            - lvgl.widget.redraw:
+            - light.turn_on: backlight_light
+
+
+# configuración SPI
 spi:
-   - id: spi_tft
-     clk_pin: GPIO14
-     mosi_pin: GPIO13
-     miso_pin: GPIO12
+ - id: spi_tft
+   clk_pin: GPIO14
+   mosi_pin: GPIO13
+   miso_pin: GPIO12
+ - id: spi_touch
+   clk_pin: GPIO25
+   mosi_pin: GPIO32
+   miso_pin: GPIO39
+
+# Configuración Display
+display:
+ - platform: ili9xxx
+   id: my_display
+   model: ILI9341
+   spi_id: spi_tft
+   rotation: 180
+   auto_clear_enabled: false
+   update_interval: never
+   color_palette: 8BIT
+   invert_colors: false
+   dimensions:
+     height: 240
+     width: 320
+   cs_pin: GPIO15
+   dc_pin: GPIO2
+
+# Configurción pantalla táctil
+#touchscreen:
+#  platform: xpt2046
+#  id: my_touch
+#  spi_id: spi_touch
+#  cs_pin: GPIO33
+#  interrupt_pin: GPIO36
 
 output:
+   
    - platform: ledc
-     pin: GPIO27
-     id: former_led_pin
-   - platform: ledc
-     id: output_red
-     pin: GPIO4
-     inverted: true
-   - platform: ledc
-     id: output_green
-     pin: GPIO16
-     inverted: true
-   - platform: ledc
-     id: output_blue
-     pin: GPIO17
-     inverted: true
-   - platform: ledc
-     pin: GPIO1
+     pin: GPIO21
      id: backlight
 
 light:
@@ -94,195 +157,362 @@ light:
      name: "Backlight Light"
      restore_mode: ALWAYS_ON
      id: backlight_light
-   - platform: monochromatic
-     output: former_led_pin
-     name: "Display Backlight"
-     id: back_light
-     restore_mode: ALWAYS_ON
-   - platform: rgb
-     name: LED
-     id: led
-     red: output_red
-     green: output_green
-     blue: output_blue
-     restore_mode: ALWAYS_OFF
+   
+
+#font:
+#  - file: "titulo.ttf"  # Ajusta la ruta al archivo de la fuente
+#    id: titulo_30
+#    size: 30
+#  - file: "titulo.ttf"
+#    id: titulo_35
+#    size: 35
+#  - file: "titulo.ttf"
+#    id: titulo_25
+#    size: 25    
+
+
+
+
+
+
+
+# ===============================================
+# =============== LVGL ==========================
+# ===============================================
+
+# Configuración LVGL
+lvgl:
+  displays:
+    - my_display
+  buffer_size: 25%
+  bg_color: 0x000000
+  theme:
+    bar:
+      radius: 0
+      indicator:
+        radius: 0
+        arc_color: red
+    label:
+      bg_color: 0x000000  # Fondo negro
+      text_color: 0xFFFFFF  # Texto blanco
+      opa: 100%
+
+  pages:
+    - id: main_page
+      widgets:
+        #- label:
+        #    align: TOP_MID
+        #    y: 5
+        #    text: ${name}
+        #    text_font: montserrat_30
+        #    text_color: 0xFFA500
+        
+        - label:
+            align: TOP_LEFT
+            x: 10
+            y: 5
+            id: label_voltage
+            text: 'V'
+            text_font: montserrat_30
+        - label:
+            align: TOP_RIGHT
+            x: -10
+            y: 5
+            id: label_soc
+            text: '%'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_LEFT
+            x: 15
+            y: 150
+            id: label_current
+            text: 'A'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_MID
+            y: 60
+            id: label_temp
+            text: 'Temperatura: -- °C'
+            text_font: montserrat_20
+
+        # Gráfica circular de potencia
+        - obj:
+            align: TOP_MID
+            y: 130
+            width: 132
+            height: 108
+            bg_color: 0x000000
+            border_width: 0
+            pad_all: 4
+            widgets:  # Fixed indentation here (was incorrectly indented before)
+              - meter:
+                  id: meter_obj
+                  height: 100%
+                  width: 100%
+                  border_width: 0
+                  bg_opa: TRANSP
+                  align: CENTER
+                  scales:
+                    - range_from: -1700
+                      range_to: 2000  # Ajustado el rango total
+                      angle_range: 180
+                      rotation: 180
+                      ticks:
+                        count: 0
+                      indicators:
+                        - line:
+                            id: val_needle
+                            width: 2
+                            r_mod: 10
+                            value: 0
+                            color: 0xFFFFFF
+                        - arc:
+                            color: 0x00FF00  # Verde (valores negativos)
+                            r_mod: 8
+                            width: 15
+                            start_value: -1700
+                            end_value: 0
+                        - arc:
+                            color: 0xFF0000 # Azul (valores positivos normales)
+                            r_mod: 8
+                            width: 15
+                            start_value: 0
+                            end_value: 1500
+                        - arc:
+                            color: 0x0000FF   # Rojo (valores positivos altos)
+                            r_mod: 8
+                            width: 15
+                            start_value: 1500
+                            end_value: 2000
+
+        - label:
+            align: TOP_RIGHT
+            x: -5
+            y: 150
+            id: label_power
+            text: 'W'
+            text_font: montserrat_30
+
+        # Sensores binarios de estado
+        - label:
+            align: LEFT_MID
+            x: 15
+            y: 100
+            text: "Carga:"
+            text_font: montserrat_20
+        - led:
+            align: LEFT_MID
+            x: 120
+            y: 100
+            id: led_charging
+            color: 0x00ff00
+
+        - label:
+            align: CENTER
+            x: 60
+            y: 100
+            text: "Descarga:"
+            text_font: montserrat_20
+        - led:
+            align: RIGHT_MID
+            x: -10
+            y: 100
+            id: led_discharging
+            color: 0x00ff00
+
+        - label:
+            align: TOP_MID
+            y: 30
+            id: capacity
+            text: 'Restante: -- Ah'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_LEFT
+            y: 90
+            id: label_voltage1
+            text: 'Celda 1: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 90
+            id: label_voltage2
+            text: 'Celda 2: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_LEFT
+            y: 120
+            id: label_voltage3
+            text: 'Celda 3: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 120
+            id: label_voltage4
+            text: 'Celda 4: -- V'
+            text_font: montserrat_20
+
+
 
 binary_sensor:
-   - platform: jbd_bms_ble
-     jbd_bms_ble_id: bms0
-     balancing:
-        name: "${name} balanceando"
-        id: balancing
-     charging:
-        name: "${name} MOS carga"
-        id: charging
-     discharging:
-        name: "${name} MOS descarga"
-        id: discharging
-   - platform: status
-     name: "Node Status"
-     id: system_status
+  - platform: jbd_bms_ble
+    jbd_bms_ble_id: bms0
+    balancing:
+      name: "${name} balanceando"
+      id: balancing
+    charging:
+      name: "${name} MOS carga"
+      id: charging
+    discharging:
+      name: "${name} MOS descarga"
+      id: discharging
 
 sensor:
-   - platform: wifi_signal
-     internal: True
-     id: wifi_signal_sensor
-     update_interval: 5s
-   - platform: jbd_bms_ble
-     jbd_bms_ble_id: bms0
-     current:
-        name: "${name} current"
-        id: bms_current
-     power:
-        name: "${name} power"
-        id: bms_power
-     state_of_charge:
-        name: "${name} state of charge"
-        id: bms_soc
-     total_voltage:
-        name: "${name} total voltage"
-        id: bms_voltage
-     temperature_1:
-        name: "${name} temperature 1"
-        id: bms_temp
-     charging_power:
-        name: "${name} charging power"
-        id: charging_power
-     discharging_power:
-        name: "${name} discharging power"
-        id: discharging_power
-     capacity_remaining:
-        name: "${name} capacity remaining"
-        id: remaining
-     min_cell_voltage:
-        name: "${name} min cell voltage"
-     max_cell_voltage:
-        name: "${name} max cell voltage"
-     cell_voltage_1:
-        name: "${name} cell voltage 1"
-        id: voltage1
-     cell_voltage_2:
-        name: "${name} cell voltage 2"
-        id: voltage2
-     cell_voltage_3:
-        name: "${name} cell voltage 3"
-        id: voltage3
-     cell_voltage_4:
-        name: "${name} cell voltage 4"
-        id: voltage4
+  - platform: jbd_bms_ble
+    jbd_bms_ble_id: bms0
+    current:
+      name: "${name} current"
+      id: bms_current
+    power:
+      name: "${name} power"
+      id: bms_power
+    state_of_charge:
+      name: "${name} state of charge"
+      id: bms_soc
+    total_voltage:
+      name: "${name} total voltage"
+      id: bms_voltage
+    temperature_1:
+      name: "${name} temperature 1"
+      id: bms_temp
+#    charging_power:
+#      name: "${name} charging power"
+#      id: charging_power
+#    discharging_power:
+#      name: "${name} discharging power"
+#      id: discharging_power
+    capacity_remaining:
+      name: "${name} capacity remaining"
+      id: remaining
+    min_cell_voltage:
+      name: "${name} min cell voltage"
+    max_cell_voltage:
+      name: "${name} max cell voltage"
+    cell_voltage_1:
+      name: "${name} cell voltage 1"
+      id: voltage1
+    cell_voltage_2:
+      name: "${name} cell voltage 2"
+      id: voltage2
+    cell_voltage_3:
+      name: "${name} cell voltage 3"
+      id: voltage3
+    cell_voltage_4:
+      name: "${name} cell voltage 4"
+      id: voltage4
 
 switch:
-   - platform: restart
-     name: ESP32-2432S028 Restart
-   - platform: jbd_bms_ble
-     jbd_bms_ble_id: bms0
-     charging:
-        name: "${name} MOS carga"
-        id: swcarga
-     discharging:
-        name: "${name} MOS descarga"
-        id: swdescarga
+  - platform: jbd_bms_ble
+    jbd_bms_ble_id: bms0
+    charging:
+      name: "${name} MOS carga"
+      id: swcarga
+    discharging:
+      name: "${name} MOS descarga"
+      id: swdescarga
 
-color:
-   - id: my_red
-     red: 100%
-     green: 0%
-     blue: 0%
-   - id: my_orange
-     red: 100%
-     green: 50%
-     blue: 0%
-   - id: my_yellow
-     red: 100%
-     green: 100%
-     blue: 0%
-   - id: my_green
-     red: 0%
-     green: 100%
-     blue: 0%
-   - id: my_blue
-     red: 0%
-     green: 0%
-     blue: 100%
-   - id: my_teal
-     red: 0%
-     green: 100%
-     blue: 100%
-   - id: my_gray
-     red: 70%
-     green: 70%
-     blue: 70%
-   - id: my_white
-     red: 100%
-     green: 100%
-     blue: 100%
+number:
+  - platform: template
+    name: LVGL Screen timeout
+    optimistic: true
+    id: display_timeout
+    unit_of_measurement: "s"
+    initial_value: 45
+    restore_value: true
+    min_value: 10
+    max_value: 180
+    step: 5
+    mode: box
 
-font:
-   - file: "Helvetica.ttf"
-     id: helvetica_48
-     size: 48
-   - file: "Helvetica.ttf"
-     id: helvetica_24
-     size: 24
-   - file: "Helvetica.ttf"
-     id: helvetica_12
-     size: 12
+interval:
+  - interval: 2s
+    then:
+      - lambda: |-
+          char str_buffer[50];  // Buffer para formatear strings
 
-time:
-   - platform: homeassistant
-     id: esptime
+          if (id(bms_soc).has_state()) {
+            float soc = id(bms_soc).state;
+            if (soc >= 0 && soc <= 100) {
+              lv_label_set_text(id(label_soc), (to_string((int)soc) + "%").c_str());
+            } else {
+              lv_label_set_text(id(label_soc), "--%");  // Added % symbol here
+            }
+          } else {
+            lv_label_set_text(id(label_soc), "--%");  // Added % symbol here
+          }
 
-text_sensor:
-   - platform: wifi_info
-     ip_address:
-        id: ip_address
+          if (id(bms_power).has_state()) {
+            lv_meter_set_indicator_value(id(meter_obj), id(val_needle), -(int)id(bms_power).state);
+            snprintf(str_buffer, sizeof(str_buffer), "%.0f W", id(bms_power).state);
+            lv_label_set_text(id(label_power), str_buffer);
+          }
 
-display:
-   - platform: ili9xxx
-     rotation: 270
-     model: TFT 2.4
-     spi_id: spi_tft
-     cs_pin: 15
-     dc_pin: 2
-     color_palette: 8BIT
-     invert_colors: false
-     lambda: |-
-        int hs = it.get_width() / 2; // Horizontal Spacing = text data horizontal center point
-        int hq = it.get_width() / 4; // text data horizontal center for two vertical lines
-        int vs = it.get_height() / 16; // Vertical Center = text data vertical center point = how many lines
-        int line_gap = 21; // distance of line from center of data text
-        it.rectangle(0,  0, it.get_width(), it.get_height(), id(my_blue));
-        it.rectangle(0, 20, it.get_width(), it.get_height(), id(my_blue));
+          // Actualización de LEDs de estado binario
 
-        it.strftime(5, 5, id(helvetica_12), id(my_white), TextAlign::TOP_LEFT, "%H:%M:%S", id(esptime).now());
-        it.print(hs, 5, id(helvetica_12), id(my_blue), TextAlign::TOP_CENTER, "${name}"); //print title  
+          if (id(charging).state) {
+            lv_led_on(id(led_charging));
+          } else {
+            lv_led_off(id(led_charging));
+          }
 
-        if (id(system_status).state) {
-          it.print(it.get_width()-5, 5, id(helvetica_12), id(my_green), TextAlign::TOP_RIGHT, "Online");
-        }
-        else {
-          it.print(it.get_width()-5, 5, id(helvetica_12), id(my_red), TextAlign::TOP_RIGHT, "Offline");
-        }
-        it.line(0, it.get_height()-20, it.get_width(), it.get_height()-20, id(my_blue)); // line across bottom above footer text
-        it.printf(hs, it.get_height()-3, id(helvetica_12), id(my_gray), TextAlign::BOTTOM_CENTER, "%.0fdBm", id(wifi_signal_sensor).state);
-        it.printf(it.get_width()-5, it.get_height()-3, id(helvetica_12), id(my_gray), TextAlign::BOTTOM_RIGHT, "%s", id(ip_address).state.c_str());
+          if (id(discharging).state) {
+            lv_led_on(id(led_discharging));
+          } else {
+            lv_led_off(id(led_discharging));
+          }
 
-        it.line(0, vs * 3, it.get_width(), vs * 3, id(my_blue));
-        it.print(hs, vs * 3 + line_gap, id(helvetica_24), id(my_white), TextAlign::CENTER, "BMS");
-        it.line(0, vs * 4, it.get_width(), vs * 4, id(my_blue));
-        it.print(hq, vs * 5, id(helvetica_12), id(my_white), TextAlign::CENTER, "Current:");
-        it.printf(3*hq, vs * 5, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.1fA", id(bms_current).state);
-        it.print(hq, vs * 6, id(helvetica_12), id(my_white), TextAlign::CENTER, "Voltaje:");
-        it.printf(3*hq, vs * 6, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.2fV", id(bms_voltage).state); // Cambiado a %.2fV
-        it.print(hq, vs * 7, id(helvetica_12), id(my_white), TextAlign::CENTER, "Remaining:");
-        it.printf(3*hq, vs * 7, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.0f", id(remaining).state);
-        it.print(hq, vs * 8, id(helvetica_12), id(my_white), TextAlign::CENTER, "Power:");
-        it.printf(3*hq, vs * 8, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.0fW", id(bms_power).state);
-        it.print(hq, vs * 9, id(helvetica_12), id(my_white), TextAlign::CENTER, "Celda1:");
-        it.printf(3*hq, vs * 9, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.2fV", id(voltage1).state); // Cambiado a %.2fV
-        it.print(hq, vs * 10, id(helvetica_12), id(my_white), TextAlign::CENTER, "Celda2:");
-        it.printf(3*hq, vs * 10, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.2fV", id(voltage2).state); // Cambiado a %.2fV
-        it.print(hq, vs * 11, id(helvetica_12), id(my_white), TextAlign::CENTER, "Celda3:");
-        it.printf(3*hq, vs * 11, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.2fV", id(voltage3).state); // Cambiado a %.2fV
-        it.print(hq, vs * 12, id(helvetica_12), id(my_white), TextAlign::CENTER, "Celda4:");
-        it.printf(3*hq, vs * 12, id(helvetica_12), id(my_white), TextAlign::CENTER, "%.2fV", id(voltage4).state); // Cambiado a %.2fV
+          if (id(bms_voltage).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f V", id(bms_voltage).state);
+            lv_label_set_text(id(label_voltage), str_buffer);
+          }
+
+          if (id(bms_current).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f A", id(bms_current).state);
+            lv_label_set_text(id(label_current), str_buffer);
+          }
+
+          if (id(bms_temp).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Temperatura: %.1f °C", id(bms_temp).state);
+            lv_label_set_text(id(label_temp), str_buffer);
+          }
+
+          if (id(remaining).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Restante: %.0f Ah", id(remaining).state);
+            lv_label_set_text(id(capacity), str_buffer);
+          }
+
+          // Voltajes individuales de celdas
+          if (id(voltage1).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 1:  %.2f V", id(voltage1).state);
+            lv_label_set_text(id(label_voltage1), str_buffer);
+          }
+          if (id(voltage2).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 2:  %.2f V", id(voltage2).state);
+            lv_label_set_text(id(label_voltage2), str_buffer);
+          }
+          if (id(voltage3).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 3:  %.2f V", id(voltage3).state);
+            lv_label_set_text(id(label_voltage3), str_buffer);
+          }
+          if (id(voltage4).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 4:  %.2f V", id(voltage4).state);
+            lv_label_set_text(id(label_voltage4), str_buffer);
+          }
+
+
+     
