@@ -1,9 +1,18 @@
 # Grupo Telegram --> https://t.me/domotica_camper
 
-ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
+  #### Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
+
+## Material Utilizado
+
+### JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+
+### ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
+
+### Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
 
 
-TUTORIAL
+
+### TUTORIAL
 
 1. Si usas windows instalar driver, por norma general el chipset que lleva el esp32 es el ch340 si se usa otro se debera instalar el que se use.--- (https://acebott.com/es/wiki/started-arduino/download-ch340-driver-on-windows-system/)
 
