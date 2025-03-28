@@ -1,13 +1,19 @@
-Grupo Telegram --> https://t.me/domotica_camper
+# Grupo Telegram --> https://t.me/domotica_camper
 
-JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
-ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
-Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
-Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jk-bms/tree/main
+## Material Utilizado
+
+### JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+
+### ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
+
+### Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
 
 
 
-TUTORIAL
+
+
+
+##TUTORIAL
 
 Pensado unicamente para bloquear el acceso por Bluetooth a la BMS, Si quieres conectar el bms a Home assistant o Openhab no uses este manual.
 
@@ -40,3 +46,9 @@ Pensado unicamente para bloquear el acceso por Bluetooth a la BMS, Si quieres co
 9. Ejecutar en un terminal.
  
             esphome run esp_jk_ble_ap.yaml
+
+
+
+##Fuentes
+
+#### Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jk-bms/tree/main
