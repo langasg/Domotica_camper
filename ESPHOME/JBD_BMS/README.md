@@ -1,3 +1,17 @@
+Grupo Telegram --> https://t.me/domotica_camper
+
+JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+
+ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
+
+Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
+
+Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jbd-bms.git
+
+TUTORIAL SEGMENTADO --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/README.md)
+
+
+
 TUTORIAL
 
 1. Antes de comenzar debemos realizar la prepariación de tu entorno, que implica la instalación de Python, instalacion de libreria Python de ESPHOME e instalar GIT (esto ultimo solo para esphome que necesiten esta funcionalidad)
