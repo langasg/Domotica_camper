@@ -1,19 +1,24 @@
-Grupo Telegram --> https://t.me/domotica_camper
+# Grupo Telegram --> https://t.me/domotica_camper
+#### Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
+
+## Material Utilizado
+
+### JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+
+### ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
+
+### Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
 
 
-JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
-
-ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
-
-Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
 
 
 
-Pasos previos
+
+### Pasos previos
 
 Preparacion del entorno (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Preparacion_entorno.md)
 
-TUTORIAL
+### TUTORIAL
 
 
 1. Descargar YAML  ---> (https://github.com/syssi/esphome-jbd-bms/blob/main/esp32-example.yaml)
@@ -34,3 +39,6 @@ TUTORIAL
 
             esphome run esp32-example.yaml
 
+
+
+### Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
