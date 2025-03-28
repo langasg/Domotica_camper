@@ -1,6 +1,6 @@
 # Grupo Telegram --> https://t.me/domotica_camper
 
-  ### Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
+  #### Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
 
 ## Material Utilizado
 
