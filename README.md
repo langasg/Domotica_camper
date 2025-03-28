@@ -1,5 +1,5 @@
 # Grupo Telegram --> https://t.me/domotica_camper
-
+## Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
 ## Material
 
 1. Pre-requisitos
