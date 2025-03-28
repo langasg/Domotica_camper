@@ -1,12 +1,14 @@
 Grupo Telegram --> https://t.me/domotica_camper
 
+Material Utilizado
+
 JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
 
 ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 
 Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
 
-Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jbd-bms.git
+
 
 TUTORIAL SEGMENTADO --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/README.md)
 
@@ -27,3 +29,6 @@ TUTORIAL
      
   
         
+Fuentes
+
+Repo fuente (Source Repository) --> https://github.com/syssi/esphome-jbd-bms.git
