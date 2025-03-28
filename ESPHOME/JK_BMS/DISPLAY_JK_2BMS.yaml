@@ -1,0 +1,911 @@
+substitutions:
+  mac_address: C8:87:80:1F:5F:B4 #AQUÍ TIENES QUE PONER LA MAC DE TU BMS
+  name: JK-BMS
+  mac_address2: C8:87:80:1F:5F:B4
+  titulo_pantalla: "Vantravel and Discover" 
+  # Please use "JK02_24S" if you own a old JK-BMS < hardware version 11.0 (hardware version >= 6.0 and < 11.0)
+  # Please use "JK02_32S" if you own a new JK-BMS >= hardware version 11.0 (f.e. JK-B2A8S20P hw 11.XW, sw 11.26)
+  # Please use "JK04" if you have some old JK-BMS <= hardware version 3.0 (f.e. JK-B2A16S hw 3.0, sw. 3.3.0)
+  protocol_version: JK02_32S
+
+external_components:
+  - source: github://syssi/esphome-jk-bms@main
+    refresh: 0s
+
+esphome:
+  name: jc3248w535
+  friendly_name: Battery Monitoring Display
+  platformio_options:
+    upload_speed: 921600
+    board_build.flash_mode: dio
+    board_build.f_flash: 80000000L
+    board_build.f_cpu: 240000000L
+  on_boot:
+    priority: -10
+    then:
+      - light.turn_on:
+          id: backlight_light
+          brightness: 100%
+
+esp32:
+  board: esp32-s3-devkitc-1
+  flash_size: 16MB
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240: "y"
+      CONFIG_ESP32S3_DATA_CACHE_64KB: "y"
+      CONFIG_ESP32S3_DATA_CACHE_LINE_64B: "y"
+      CONFIG_SPIRAM_FETCH_INSTRUCTIONS: y
+      CONFIG_SPIRAM_RODATA: y
+
+psram:
+  mode: octal
+  speed: 80MHz
+
+logger:
+  baud_rate: 921600
+
+ble_client:
+  - id: client0
+    mac_address: ${mac_address}
+  - id: client1
+    mac_address: ${mac_address2}
+    
+jk_bms_ble:
+  - id: bms0
+    ble_client_id: client0
+    protocol_version: ${protocol_version}
+    throttle: 2s
+  - id: bms1
+    ble_client_id: client1
+    protocol_version: ${protocol_version}
+    throttle: 2s
+
+spi:
+  id: display_qspi
+  type: quad
+  clk_pin: 47
+  data_pins: [21, 48, 40, 39]
+
+i2c:
+  sda: 4
+  scl: 8
+  id: touchscreen_bus
+
+display:
+  - platform: qspi_dbi
+    model: AXS15231
+    data_rate: 40MHz
+    id: my_display
+    spi_id: display_qspi
+    dimensions:
+      height: 480
+      width: 320
+    cs_pin: 45
+    rotation: 90
+    auto_clear_enabled: false
+
+output:
+  - platform: ledc
+    pin: GPIO1
+    id: backlight
+
+light:
+  - platform: monochromatic
+    output: backlight
+    name: "Backlight Light" 
+    restore_mode: ALWAYS_ON
+    id: backlight_light
+
+touchscreen:
+  - platform: axs15231
+    id: my_touch
+    display: my_display
+    i2c_id: touchscreen_bus
+    transform:
+      swap_xy: true
+    on_touch:
+      then:
+        - light.toggle: backlight_light
+
+lvgl:
+  draw_rounding: 8
+  displays: my_display
+  touchscreens: my_touch
+  bg_color: 0x000000  # Fondo negro
+  border_width: 0
+  outline_width: 0
+  theme:
+    bar:
+      radius: 0
+      indicator:
+        radius: 0
+        arc_color: red
+    label:
+      bg_color: 0x000000  # Fondo negro
+      text_color: 0xE0FFFF  # Texto blanco
+      opa: 100%
+
+  pages:
+    - id: main_page
+      on_press:
+            - lvgl.page.next:
+                animation: OUT_LEFT
+                time: 1000ms
+      widgets:
+        - label:
+            align: TOP_MID
+            y: 5
+            text: ${titulo_pantalla}
+            text_font: montserrat_30
+            text_color: 0xFFA500
+        
+        - label:
+            align: TOP_LEFT
+            x: 10
+            y: 50
+            id: label_voltage
+            text: 'V'
+            text_font: montserrat_30
+        - label:
+            align: TOP_RIGHT
+            x: -10
+            y: 50
+            id: label_soc
+            text: '%'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_LEFT
+            x: 15
+            y: 190
+            id: label_current
+            text: 'A'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_MID
+            y: 80
+            id: label_temp
+            text: 'Temperatura: -- °C'
+            text_font: montserrat_26
+
+        # Gráfica circular de potencia
+        - obj:
+            align: TOP_MID
+            y: 140
+            width: 220
+            height: 180
+            bg_color: 0x000000
+            border_width: 0
+            pad_all: 4
+            widgets:
+              - meter:
+                  id: meter_obj
+                  height: 100%
+                  width: 100%
+                  border_width: 0
+                  bg_opa: TRANSP
+                  align: CENTER
+                  scales:
+                    - range_from: -2000
+                      range_to: 2000
+                      angle_range: 180  # Semicírculo
+                      rotation: 180    # Parte inferior
+                      ticks:
+                        count: 0
+                      indicators:
+                        - line:
+                            id: val_needle
+                            width: 4
+                            r_mod: 10
+                            value: 0
+                            color: 0x0082FC
+                        - arc:
+                            color: 0xFF0000  # Rojo
+                            r_mod: 8
+                            width: 25
+                            start_value: -2000
+                            end_value: -1600
+                        - arc:
+                            color: 0xFFA500  # Naranja
+                            r_mod: 8
+                            width: 25
+                            start_value: -1600
+                            end_value: -1200
+                        - arc:
+                            color:  0xFFFF00  # Amarillo
+                            r_mod: 8
+                            width: 25
+                            start_value: -1200
+                            end_value: 0
+                        - arc:
+                            color: 0x00FF00  # verde inicial
+                            r_mod: 8
+                            width: 25
+                            start_value: 0
+                            end_value: 1200
+                        - arc:
+                            color: 0x32CD32  # Verde claro
+                            r_mod: 8
+                            width: 25
+                            start_value: 1200
+                            end_value: 1600
+                        - arc:
+                            color: 0x006400  # Verde oscuro
+                            r_mod: 8
+                            width: 25
+                            start_value: 1600
+                            end_value: 2000
+
+
+        - label:
+            align: TOP_RIGHT
+            x: -5
+            y: 190
+            id: label_power
+            text: 'W'
+            text_font: montserrat_30
+
+        # Sensores binarios de estado
+        - label:
+            align: CENTER
+            x: 160
+            y: 140
+            text: "Carga:"
+            text_font: montserrat_20
+        - led:
+            align: RIGHT_MID
+            x: -10
+            y: 140
+            id: led_charging
+            color: 0x00ff00                      
+        - label:
+            align: LEFT_MID
+            x: 0
+            y: 140
+            text: "Descarga:"
+            text_font: montserrat_20
+        - led:
+            align: LEFT_MID
+            x: 110
+            y: 140
+            id: led_discharging
+            color: 0x00ff00
+
+        - label:
+            align: TOP_MID
+            y: 50
+            id: capacity
+            text: 'Restante: -- Ah'
+            text_font: montserrat_26
+
+        - label:
+            align: TOP_LEFT
+            y: 130
+            id: label_voltage1
+            text: 'Celda 1: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 130
+            id: label_voltage2
+            text: 'Celda 2: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_LEFT
+            y: 160
+            id: label_voltage3
+            text: 'Celda 3: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 160
+            id: label_voltage4
+            text: 'Celda 4: -- V'
+            text_font: montserrat_20
+            
+        - label:
+            align: CENTER
+            x: -5        # Centrado en el eje X
+            y: 140      # Posición en el eje Y
+            id: label_balancing
+            text: "Balance"
+            text_font: montserrat_20
+            text_color: 0x00FF00  # Verde para activo
+            
+        - label:
+            align: CENTER
+            x: 0
+            y: 8
+            id: label_center_text
+            text: "-      +"
+            text_font: montserrat_30
+            text_color: 0x0000FF  # Azul
+    - id: main_page2
+      on_press:
+            - lvgl.page.next:
+                animation: OUT_LEFT
+                time: 1000ms
+      widgets:
+        - label:
+            align: TOP_MID
+            y: 5
+            text: ${titulo_pantalla}
+            text_font: montserrat_30
+            text_color: 0xFFA500
+        
+        - label:
+            align: TOP_LEFT
+            x: 10
+            y: 50
+            id: label2_voltage
+            text: 'V'
+            text_font: montserrat_30
+        - label:
+            align: TOP_RIGHT
+            x: -10
+            y: 50
+            id: label_soc2
+            text: '%'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_LEFT
+            x: 15
+            y: 190
+            id: label_current2
+            text: 'A'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_MID
+            y: 80
+            id: label_temp2
+            text: 'Temperatura: -- °C'
+            text_font: montserrat_26
+
+        # Gráfica circular de potencia
+        - obj:
+            align: TOP_MID
+            y: 140
+            width: 220
+            height: 180
+            bg_color: 0x000000
+            border_width: 0
+            pad_all: 4
+            widgets:
+              - meter:
+                  id: meter_obj2
+                  height: 100%
+                  width: 100%
+                  border_width: 0
+                  bg_opa: TRANSP
+                  align: CENTER
+                  scales:
+                    - range_from: -2000
+                      range_to: 2000
+                      angle_range: 180  # Semicírculo
+                      rotation: 180    # Parte inferior
+                      ticks:
+                        count: 0
+                      indicators:
+                        - line:
+                            id: val_needle2
+                            width: 4
+                            r_mod: 10
+                            value: 0
+                            color: 0x0082FC
+                        - arc:
+                            color: 0xFF0000  # Rojo
+                            r_mod: 8
+                            width: 25
+                            start_value: -2000
+                            end_value: -1600
+                        - arc:
+                            color: 0xFFA500  # Naranja
+                            r_mod: 8
+                            width: 25
+                            start_value: -1600
+                            end_value: -1200
+                        - arc:
+                            color:  0xFFFF00  # Amarillo
+                            r_mod: 8
+                            width: 25
+                            start_value: -1200
+                            end_value: 0
+                        - arc:
+                            color: 0x00FF00  # verde inicial
+                            r_mod: 8
+                            width: 25
+                            start_value: 0
+                            end_value: 1200
+                        - arc:
+                            color: 0x32CD32  # Verde claro
+                            r_mod: 8
+                            width: 25
+                            start_value: 1200
+                            end_value: 1600
+                        - arc:
+                            color: 0x006400  # Verde oscuro
+                            r_mod: 8
+                            width: 25
+                            start_value: 1600
+                            end_value: 2000
+
+
+        - label:
+            align: TOP_RIGHT
+            x: -5
+            y: 190
+            id: label_power2
+            text: 'W'
+            text_font: montserrat_30
+
+        # Sensores binarios de estado
+        - label:
+            align: CENTER
+            x: 160
+            y: 140
+            text: "Carga:"
+            text_font: montserrat_20
+        - led:
+            align: RIGHT_MID
+            x: -10
+            y: 140
+            id: led_charging2
+            color: 0x00ff00                      
+        - label:
+            align: LEFT_MID
+            x: 0
+            y: 140
+            text: "Descarga:"
+            text_font: montserrat_20
+        - led:
+            align: LEFT_MID
+            x: 110
+            y: 140
+            id: led_discharging2
+            color: 0x00ff00
+
+        - label:
+            align: TOP_MID
+            y: 50
+            id: capacity2
+            text: 'Restante: -- Ah'
+            text_font: montserrat_26
+
+        - label:
+            align: TOP_LEFT
+            y: 130
+            id: label_voltage12
+            text: 'Celda 1: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 130
+            id: label_voltage22
+            text: 'Celda 2: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_LEFT
+            y: 160
+            id: label_voltage32
+            text: 'Celda 3: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 160
+            id: label_voltage42
+            text: 'Celda 4: -- V'
+            text_font: montserrat_20
+            
+        - label:
+            align: CENTER
+            x: -5        # Centrado en el eje X
+            y: 140      # Posición en el eje Y
+            id: label_balancing2
+            text: "Balance"
+            text_font: montserrat_20
+            text_color: 0x00FF00  # Verde para activo
+            
+        - label:
+            align: CENTER
+            x: 0
+            y: 8
+            id: label_center_text2
+            text: "-      +"
+            text_font: montserrat_30
+            text_color: 0x0000FF  # Azul
+
+
+
+binary_sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms0
+    balancing:
+      name: "${name} balancing"
+      id: balancing
+    charging:
+      name: "${name} charging"
+      id: charging
+    discharging:
+      name: "${name} discharging"
+      id: discharging
+    online_status:
+      name: "${name} online status"
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms1
+    balancing:
+      name: "${name} balancing"
+      id: balancing2
+    charging:
+      name: "${name} charging"
+      id: charging2
+    discharging:
+      name: "${name} discharging"
+      id: discharging2
+    online_status:
+      name: "${name} online status"
+      
+button:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms0
+    retrieve_settings:
+      name: "${name} retrieve settings"
+    retrieve_device_info:
+      name: "${name} retrieve device info"      
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms1
+    retrieve_settings:
+      name: "${name} retrieve settings"
+    retrieve_device_info:
+      name: "${name} retrieve device info" 
+     
+sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms0
+    min_cell_voltage:
+      name: "${name} min cell voltage"
+    max_cell_voltage:
+      name: "${name} max cell voltage"
+    min_voltage_cell:
+      name: "${name} min voltage cell"
+    max_voltage_cell:
+      name: "${name} max voltage cell"
+    delta_cell_voltage:
+      name: "${name} delta cell voltage"
+    average_cell_voltage:
+      name: "${name} average cell voltage"
+    cell_voltage_1:
+      name: "${name} cell voltage 1"
+      id: voltage1
+    cell_voltage_2:
+      name: "${name} cell voltage 2"
+      id: voltage2
+    cell_voltage_3:
+      name: "${name} cell voltage 3"
+      id: voltage3
+    cell_voltage_4:
+      name: "${name} cell voltage 4"
+      id: voltage4
+    total_voltage:
+      name: "${name} total voltage"
+      id: bms_voltage
+    current:
+      name: "${name} current"
+      id: bms_current
+    power:
+      name: "${name} power"
+      id: bms_power
+    charging_power:
+      name: "${name} charging power"
+    discharging_power:
+      name: "${name} discharging power"
+    temperature_sensor_1:
+      name: "${name} temperature sensor 1"
+      id: bms_temp
+    state_of_charge:
+      name: "${name} state of charge"
+      id: bms_soc
+    capacity_remaining:
+      name: "${name} capacity remaining"
+      id: remaining
+    total_battery_capacity_setting:
+      name: "${name} total battery capacity setting"
+    charging_cycles:
+      name: "${name} charging cycles"
+    total_charging_cycle_capacity:
+      name: "${name} total charging cycle capacity"
+    total_runtime:
+      name: "${name} total runtime"
+    balancing_current:
+      name: "${name} balancing current"
+    errors_bitmask:
+      name: "${name} errors bitmask"
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms1
+    min_cell_voltage:
+      name: "${name} min cell voltage"
+    max_cell_voltage:
+      name: "${name} max cell voltage"
+    min_voltage_cell:
+      name: "${name} min voltage cell"
+    max_voltage_cell:
+      name: "${name} max voltage cell"
+    delta_cell_voltage:
+      name: "${name} delta cell voltage"
+    average_cell_voltage:
+      name: "${name} average cell voltage"
+    cell_voltage_1:
+      name: "${name} cell voltage 1"
+      id: voltage12
+    cell_voltage_2:
+      name: "${name} cell voltage 2"
+      id: voltage22
+    cell_voltage_3:
+      name: "${name} cell voltage 3"
+      id: voltage32
+    cell_voltage_4:
+      name: "${name} cell voltage 4"
+      id: voltage42
+    total_voltage:
+      name: "${name} total voltage"
+      id: bms_voltage2
+    current:
+      name: "${name} current"
+      id: bms_current2
+    power:
+      name: "${name} power"
+      id: bms_power2
+    charging_power:
+      name: "${name} charging power"
+    discharging_power:
+      name: "${name} discharging power"
+    temperature_sensor_1:
+      name: "${name} temperature sensor 1"
+      id: bms_temp2
+    state_of_charge:
+      name: "${name} state of charge"
+      id: bms_soc2
+    capacity_remaining:
+      name: "${name} capacity remaining"
+      id: remaining2
+    total_battery_capacity_setting:
+      name: "${name} total battery capacity setting"
+    charging_cycles:
+      name: "${name} charging cycles"
+    total_charging_cycle_capacity:
+      name: "${name} total charging cycle capacity"
+    total_runtime:
+      name: "${name} total runtime"
+    balancing_current:
+      name: "${name} balancing current"
+    errors_bitmask:
+      name: "${name} errors bitmask"
+
+switch:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms0
+    charging:
+      name: "${name} charging"
+      id: swcarga
+    discharging:
+      name: "${name} discharging"
+      id: swdescarga
+    balancer:
+      name: "${name} balancer"
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms1
+    charging:
+      name: "${name} charging"
+      id: swcarga2
+    discharging:
+      name: "${name} discharging"
+      id: swdescarga2
+    balancer:
+      name: "${name} balancer"
+      
+text_sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms0
+    errors:
+      name: "${name} errors"
+    total_runtime_formatted:
+      name: "${name} total runtime formatted" 
+  - platform: jk_bms_ble
+    jk_bms_ble_id: bms1
+    errors:
+      name: "${name} errors"
+    total_runtime_formatted:
+      name: "${name} total runtime formatted"      
+
+
+# Optional Lambda to update LVGL widgets
+interval:
+  - interval: 2s
+    then:
+      - lambda: |-
+          char str_buffer[50];  // Buffer para formatear strings
+
+          if (id(bms_soc).has_state()) {
+            float soc = id(bms_soc).state;
+            if (soc >= 0 && soc <= 100) {
+              lv_label_set_text(id(label_soc), (to_string((int)soc) + "%").c_str());
+            } else {
+              lv_label_set_text(id(label_soc), "--%");  // Added % symbol here
+            }
+          } else {
+            lv_label_set_text(id(label_soc), "--%");  // Added % symbol here
+          }
+
+          if (id(bms_power).has_state()) {
+            lv_meter_set_indicator_value(id(meter_obj), id(val_needle), (int)id(bms_power).state);
+            snprintf(str_buffer, sizeof(str_buffer), "%.0f W", id(bms_power).state);
+            lv_label_set_text(id(label_power), str_buffer);
+          }
+
+          // Actualización de LEDs de estado binario
+
+          if (id(charging).state) {
+            lv_led_set_color(id(led_charging), lv_color_hex(0x00FF00));  // Verde para activo
+          } else {
+           lv_led_set_color(id(led_charging), lv_color_hex(0xFF0000));  // Rojo para inactivo
+           lv_led_off(id(led_charging));  // Apaga el LED si es necesario
+          }
+
+
+
+
+          if (id(discharging).state) {
+            lv_led_set_color(id(led_discharging), lv_color_hex(0x00FF00));  // Verde para activo
+          } else {
+           lv_led_set_color(id(led_discharging), lv_color_hex(0xFF0000));  // Rojo para inactivo
+           lv_led_off(id(led_discharging));  // Apaga el LED si es necesario
+          }
+          
+          static bool is_visible = true;  // Estado inicial de visibilidad
+          if (id(balancing).state) {
+          if (is_visible) {
+            lv_label_set_text(id(label_balancing), "Balanceando");
+            lv_obj_set_style_text_color(id(label_balancing), lv_color_hex(0x00FF00), 0);  // Verde para activo
+          } else {
+            lv_label_set_text(id(label_balancing), " ");  // Ocultar el texto
+          }
+            is_visible = !is_visible;  // Alternar visibilidad
+          } else {
+            lv_label_set_text(id(label_balancing), "Bateria LiFePO4");
+            lv_obj_set_style_text_color(id(label_balancing), lv_color_hex(0x404040), 0);  // gris para inactivo
+          }
+
+          if (id(bms_voltage).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f V", id(bms_voltage).state);
+            lv_label_set_text(id(label_voltage), str_buffer);
+          }
+
+          if (id(bms_current).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f A", id(bms_current).state);
+            lv_label_set_text(id(label_current), str_buffer);
+          }
+
+          if (id(bms_temp).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Temperatura: %.1f °C", id(bms_temp).state);
+            lv_label_set_text(id(label_temp), str_buffer);
+          }
+
+          if (id(remaining).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Restante: %.0f Ah", id(remaining).state);
+            lv_label_set_text(id(capacity), str_buffer);
+          }
+
+          // Voltajes individuales de celdas
+          if (id(voltage1).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 1:  %.2f V", id(voltage1).state);
+            lv_label_set_text(id(label_voltage1), str_buffer);
+          }
+          if (id(voltage2).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 2:  %.2f V", id(voltage2).state);
+            lv_label_set_text(id(label_voltage2), str_buffer);
+          }
+          if (id(voltage3).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 3:  %.2f V", id(voltage3).state);
+            lv_label_set_text(id(label_voltage3), str_buffer);
+          }
+          if (id(voltage4).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 4:  %.2f V", id(voltage4).state);
+            lv_label_set_text(id(label_voltage4), str_buffer);
+          }
+          if (id(bms_soc2).has_state()) {
+            float soc2 = id(bms_soc2).state;
+            if (soc2 >= 0 && soc2 <= 100) {
+              lv_label_set_text(id(label_soc2), (to_string((int)soc2) + "%").c_str());
+            } else {
+              lv_label_set_text(id(label_soc2), "--%");  // Added % symbol here
+            }
+          } else {
+            lv_label_set_text(id(label_soc2), "--%");  // Added % symbol here
+          }
+
+          if (id(bms_power2).has_state()) {
+            lv_meter_set_indicator_value(id(meter_obj), id(val_needle), (int)id(bms_power2).state);
+            snprintf(str_buffer, sizeof(str_buffer), "%.0f W", id(bms_power2).state);
+            lv_label_set_text(id(label_power2), str_buffer);
+          }
+
+          // Actualización de LEDs de estado binario
+
+          if (id(charging2).state) {
+            lv_led_set_color(id(led_charging2), lv_color_hex(0x00FF00));  // Verde para activo
+          } else {
+           lv_led_set_color(id(led_charging2), lv_color_hex(0xFF0000));  // Rojo para inactivo
+           lv_led_off(id(led_charging2));  // Apaga el LED si es necesario
+          }
+
+
+
+
+          if (id(discharging2).state) {
+            lv_led_set_color(id(led_discharging2), lv_color_hex(0x00FF00));  // Verde para activo
+          } else {
+           lv_led_set_color(id(led_discharging2), lv_color_hex(0xFF0000));  // Rojo para inactivo
+           lv_led_off(id(led_discharging2));  // Apaga el LED si es necesario
+          }
+          
+          is_visible = true;  // Estado inicial de visibilidad
+          if (id(balancing2).state) {
+          if (is_visible) {
+            lv_label_set_text(id(label_balancing2), "Balanceando");
+            lv_obj_set_style_text_color(id(label_balancing2), lv_color_hex(0x00FF00), 0);  // Verde para activo
+          } else {
+            lv_label_set_text(id(label_balancing2), " ");  // Ocultar el texto
+          }
+            is_visible = !is_visible;  // Alternar visibilidad
+          } else {
+            lv_label_set_text(id(label_balancing2), "Bateria LiFePO4");
+            lv_obj_set_style_text_color(id(label_balancing2), lv_color_hex(0x404040), 0);  // gris para inactivo
+          }
+
+          if (id(bms_voltage2).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f V", id(bms_voltage2).state);
+            lv_label_set_text(id(label2_voltage), str_buffer);
+          }
+
+          if (id(bms_current2).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f A", id(bms_current2).state);
+            lv_label_set_text(id(label_current2), str_buffer);
+          }
+
+          if (id(bms_temp2).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Temperatura: %.1f °C", id(bms_temp2).state);
+            lv_label_set_text(id(label_temp2), str_buffer);
+          }
+
+          if (id(remaining2).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Restante: %.0f Ah", id(remaining2).state);
+            lv_label_set_text(id(capacity2), str_buffer);
+          }
+
+          // Voltajes individuales de celdas
+          if (id(voltage12).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 1:  %.2f V", id(voltage12).state);
+            lv_label_set_text(id(label_voltage12), str_buffer);
+          }
+          if (id(voltage22).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 2:  %.2f V", id(voltage22).state);
+            lv_label_set_text(id(label_voltage22), str_buffer);
+          }
+          if (id(voltage32).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 3:  %.2f V", id(voltage32).state);
+            lv_label_set_text(id(label_voltage32), str_buffer);
+          }
+          if (id(voltage42).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 4:  %.2f V", id(voltage42).state);
+            lv_label_set_text(id(label_voltage42), str_buffer);
+          }
