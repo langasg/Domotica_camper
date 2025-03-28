@@ -1,6 +1,6 @@
 # Grupo Telegram --> https://t.me/domotica_camper
 
-
+## Material
 
 1. Pre-requisitos
     - Computo:
@@ -26,6 +26,8 @@
        2. ESP8266. https://s.click.aliexpress.com/e/_Ey6mt3l
        3. Arduino
 
+## Instalación
+
 2. Instalación Server 
    En el apartado anterior hemos visto que necesitamos unmodulo de computo (RasPi o MiniPC) en el cual necesitamos albergar el server, que va a ser el encargado de recoger todos los datos y realizar los automatismos que deseemos.
 
@@ -35,11 +37,14 @@
       1. Raspberry pi:   https://www.home-assistant.io/installation/raspberrypi
       2. Mini PC:  https://www.home-assistant.io/installation/generic-x86-64
       3. ODroid: https://www.home-assistant.io/installation/odroid
-   3. Openhab (Menos conocido, tiene menos soporte, pero para las personas que manejan entornos linux da una gran flexibilidad y comodidad, ya que simplemente es un paquete y la base es un raspbian, desde mi punto de vista más ligero que HA)
+3. Openhab (Menos conocido, tiene menos soporte, pero para las personas que manejan entornos linux da una gran flexibilidad y comodidad, ya que simplemente es un paquete y la base es un raspbian, desde mi punto de vista más ligero que HA)
       1. Raspberry pi: https://www.openhab.org/docs/installation/openhabian.html
       2. Linux: https://www.openhab.org/docs/installation/linux.html
       3. Windows: https://www.openhab.org/docs/installation/windows.html
       4. macOS: https://www.openhab.org/docs/installation/macos.html
+
+## Comunicaicones
+
 4. Conectividad
   Este punto es bastante crítico, ya que por normal general la conexion que tengamos en nuestra autocaravana/camper no va a ser igual que nuestra casa, raro es la compañia con cobertura movil que te da ip fija (ya no solo fija, fuera de un cgnat) y sin eso de nada nos vale abrir puertos.
       Aqui también quiero establecer dos escenarios:
@@ -52,6 +57,8 @@
 
        1. Tailscale: esta aplicación te permite crear un VPN privada punto a punto con todos los dispositivos que añadas ya sean Windows, Linux,MAC, Android,IOS. Todo esto sin la necesidad de ips fijas, dominios dns ni abrir puertos, por lo cual con cualquiera de las dos soluciones anteriores estaremos contentos.
           1. https://tailscale.com
+
+## Dispositivos / Sensores
 
 6. Dispositivos
 
@@ -83,12 +90,11 @@
           
                https://github.com/SWW13/homeassistant-victron-ir-ble
           
-    
-############################################################################################################################################################################
-############################################################################################################################################################################
 
 
-+ NOTIFICACIONES
+
+
+## NOTIFICACIONES
 
 Uno de los puntos destacados de tener todo controlado desde un servidor es que podamos gestionar nsootros mismo las notificaciones, lo más comodo será uitlizar Telegram
 
@@ -136,7 +142,7 @@ Uno de los puntos destacados de tener todo controlado desde un servidor es que p
              service: notify.telegram
            ```                        
             
-+ CONFIGURACION COMPLEMENTO Hass.io Access Point
+## CONFIGURACION COMPLEMENTO Hass.io Access Point
 
 Este complemento nos proporcionara la posibilidad de crear un AP dodne se conecten nuestros dispositivos y a traves de otro adpatador de wifi nos conectaremos a nuestra salida a internet, lo que nos proporciona esto es poder salir por el wifi de cualquier movil. Para lo cual necesitaremos dos adapatadores de red, uno puede ser el propio de la raspberry pero necesitaremos uno externo, en la seccion de prerequisitos teneis la lista.
 
@@ -162,7 +168,7 @@ Este complemento nos proporcionara la posibilidad de crear un AP dodne se conect
 
 
 
-+ Proceso configuracion Termometros Xiaomi bluetooth
+## Proceso configuracion Termometros Xiaomi bluetooth
 
 
    Lo que he tenido que hacer es flashear los termómetros con un firmware especial y luego un esp32 le instalas el openmqttgateway y lo configurar contra tu servidor mqtt y ya haces lo que necesites.
