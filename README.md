@@ -1,5 +1,5 @@
 # Grupo Telegram --> https://t.me/domotica_camper
-## Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
+
 ## Material
 
 1. Pre-requisitos
@@ -185,3 +185,9 @@ Este complemento nos proporcionara la posibilidad de crear un AP dodne se conect
 
       https://docs.openmqttgateway.com/upload/web-install.html
    Página para instalar openmqtt en un esp32, hay que elegir la opción esp32dev-ble, después te conectas al wifi que crea y ya le configuras tu wifi y tu servidor mqtt.
+
+
+
+
+
+   ## Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
