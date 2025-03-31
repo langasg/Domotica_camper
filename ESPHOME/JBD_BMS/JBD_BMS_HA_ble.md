@@ -1,5 +1,5 @@
 # Grupo Telegram --> https://t.me/domotica_camper
-#### Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
+
 
 ## Material Utilizado
 
@@ -45,3 +45,4 @@ Preparacion del entorno (https://github.com/langasg/Domotica_camper/blob/main/ES
 
 ### Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
 
+#### Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
