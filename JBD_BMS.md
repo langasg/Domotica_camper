@@ -1,17 +1,17 @@
-Grupo Telegram --> https://t.me/domotica_camper
+# Grupo Telegram --> https://t.me/domotica_camper
 
 
-JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+### JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
 
-ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
+### ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 
-Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
+### Esp32 display https://s.click.aliexpress.com/e/_EJieKBO
 
-Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
 
-TUTORIAL SEGMENTADO  --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/README.md)
 
-TUTORIAL
+### TUTORIAL SEGMENTADO  --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/README.md)
+
+## TUTORIAL
 
 1. Si usas windows instalar driver, por norma general el chipset que lleva el esp32 es el ch340 si se usa otro se debera instalar el que se use.--- (https://acebott.com/es/wiki/started-arduino/download-ch340-driver-on-windows-system/)
 2. 
@@ -84,3 +84,7 @@ TUTORIAL
   
             esphome run esp32-ble-jbd-ap.yaml
 
+
+
+
+### Repo fuente (Source Repository) --> [https://github.com/syssi/esphome-jbd-bms.git](https://github.com/syssi/esphome-jbd-bms/tree/main)
