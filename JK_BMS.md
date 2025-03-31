@@ -13,7 +13,7 @@
 
 
 
-##TUTORIAL
+## TUTORIAL
 
 Pensado unicamente para bloquear el acceso por Bluetooth a la BMS, Si quieres conectar el bms a Home assistant o Openhab no uses este manual.
 
