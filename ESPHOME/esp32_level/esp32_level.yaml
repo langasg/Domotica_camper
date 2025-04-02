@@ -1,0 +1,49 @@
+esphome:
+  name: esp32-c3-level
+  friendly_name: esp32_c3_level
+
+esp32:
+  board: esp32-c3-devkitm-1
+  variant: esp32c3
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: ""
+
+ota:
+  - platform: esphome
+    password: ""
+
+wifi:
+  ssid: XXXXXXXXXX
+  password: XXXXXXXXXX
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp32-Level Fallback Hotspot"
+    password: ""
+
+captive_portal:
+    
+
+#i2c:
+#  sda: GPIO21
+#  scl: GPIO22
+i2c:
+  sda: GPIO08
+  scl: GPIO09
+
+sensor:
+  - platform: mpu6050
+    address: 0x68
+    update_interval: 2s
+    accel_x:
+      name: "MPU6050 Accel X"
+    accel_y:
+      name: "MPU6050 Accel Y" 
