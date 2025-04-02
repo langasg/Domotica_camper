@@ -1,0 +1,53 @@
+esphome:
+  name: esp32-water-meter
+  friendly_name: esp32-water-meter
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: ""
+
+ota:
+  - platform: esphome
+    password: ""
+
+wifi:
+  ssid: XXXXXXXXXXX
+  password: XXXXXXXXXXXXXX
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp32-Water-Meter"
+    password: ""
+
+captive_portal:
+
+
+#uart:
+#  id: uart_1
+#  tx_pin: GPIO17
+#  rx_pin: GPIO16
+#  baud_rate: 9600
+
+sensor:
+  #- platform: "jsn_sr04t"
+  #  name: "Distance"
+  #  #model: "aj_sr04m"
+  #  update_interval: 1s
+  #  uart_id: uart_1
+  - platform: ultrasonic
+    trigger_pin: GPIO17
+    echo_pin: GPIO16
+    name: "Ultrasonic Sensor"
+    pulse_time: 20us
+    update_interval: 30s 
+    
+    
