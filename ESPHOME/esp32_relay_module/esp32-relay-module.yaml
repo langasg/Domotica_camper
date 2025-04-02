@@ -1,0 +1,75 @@
+esphome:
+  name: esp32-relay-module
+  friendly_name: esp32-relay-module
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: ""
+
+ota:
+  - platform: esphome
+    password: ""
+
+wifi:
+  ssid: XXXXXXXXXX
+  password: XXXXXXX
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp32-Relay-Module"
+    password: ""
+
+captive_portal:
+
+web_server:
+  port: 80
+
+switch:
+  - platform: gpio
+    pin: 15
+    name: "Relay #1"
+    inverted: true
+
+  - platform: gpio
+    pin: 2
+    name: "Relay #2"
+    inverted: true
+
+  - platform: gpio
+    pin: 4
+    name: "Relay #3"
+    inverted: true
+
+  - platform: gpio
+    pin: 16
+    name: "Relay #4"
+    inverted: true
+
+  - platform: gpio
+    pin: 17
+    name: "Relay #5"
+    inverted: true
+
+  - platform: gpio
+    pin: 5
+    name: "Relay #6"
+    inverted: true
+
+  - platform: gpio
+    pin: 18
+    name: "Relay #7"
+    inverted: true
+
+  - platform: gpio
+    pin: 19
+    name: "Relay #8"
+    inverted: true
