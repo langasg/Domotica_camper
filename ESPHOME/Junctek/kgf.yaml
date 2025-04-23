@@ -1,1 +1,73 @@
+substitutions:
+  name: "shunt"
+  friendly_name: Shunt
 
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/Tommixoft/esphome-junctek_kgf
+      ref: main
+    components: [ junctek_kgf ]
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+uart:
+  tx_pin: TX #26
+  rx_pin: RX #27
+  baud_rate: 115200
+
+
+sensor:
+  - platform: junctek_kgf
+    address: 1
+    invert_current: true
+    update_stats_interval: 3000 #3 seconds
+    voltage:
+      name: "Battery Voltage"
+    current:
+      name: "Battery Current"
+    power:
+      name: "Battery Power"
+    battery_level:
+      name: "Battery Level"
+    amp_hour_remain:
+      name: "Battery Ah Remaining"
+    amp_hour_used_total:
+      name: "Battery Ah Used Total"
+    amp_hour_charged_total:
+      name: "Battery Ah Charged Total"            
+    temperature:
+      name: "Temperature"
+
+    # usless sensor, seems not to work and always returns 1 mili ohm.
+    battery_ohm:
+      name: "Battery Resistance"
+    
+    # 0 = ON, 1 = OVP, 2 = OCP, 3 = UVP/LVP, 5 = OPP, 6 = OTP, 7 = UTP??, 99 = OFF (relay is off, if you connected it to Junctek device)
+    # i think if there is multiple problems code can be combined. Lets say 7 = OVP + OTP.. but im not sure is this really the case, manual sucks.
+    output_status:
+      name: "Output Status"
+
+    # Shows how much time left at current discharge rate to go to 0%, or how much time left to go to 100% in case of charge. 
+    battery_life:
+      name: "Battery life remaining"
+
+    # It just multiply of amps and voltage in case of charging. With this you HA you can add custom sensor to calculate Kwh and integrate into ENERGY dashboard.   
+    battery_charged_energy:
+      name: "Battery Charging Power"
+
+    #  It just multiply of amps and voltage in case of discharging. With this you HA you can add custom sensor to calculate Kwh and integrate into ENERGY dashboard.   
+    battery_discharged_energy:
+      name: "Battery Discharging Power"   
+
+
+logger:
+  level: ERROR
+  baud_rate: 0 #in this example we use UART that is also used by the logger. We dont need serial logger so we just disable it here
