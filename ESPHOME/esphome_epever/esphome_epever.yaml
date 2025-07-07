@@ -41,23 +41,23 @@ esphome:
             ESP_LOGI("ModbusLambda", "EPSOLAR RTC set to %02d:%02d:%02d %02d.%02d.%04d", hour, minutes, seconds, day, month,
                     year + 2000);
           }
-          std::vector<uint16_t> battery_settings1 = {
-              0,       // 9000 Battery Type 0 =  User
-              0x0064,  // 9001 Battery Cap == 100AH
-              0x012C,  // 9002 Temp compensation -3V /°C/2V
-              0x155E,  // 9003 0x5DC == 1367 Over Voltage Disconnect Voltage 54,7
-              0x150E,  // 9004 0x58C == 1350 Charging Limit Voltage 53,9
-              0x150E,  // 9005 Over Voltage Reconnect Voltage 53,9
-              0x14E6,  // 9006 Equalize Charging Voltage 53,5
-              0x14E6,  // 9007 Boost Charging Voltage 53,5
-              0x14B4,  // 9008 Float Charging Voltage 53
-              0x13C4,   // 9009 Boost Reconnect Charging Voltage 50,6
-              0x12C0,  // 900A Low Voltage Reconnect Voltage 48
-              0x13B0,  // 900B Under Voltage Warning Reconnect Voltage 50,4
-              0x1360,  // 900c Under Volt. Warning Volt 49,6
-              0x11F8,  // 900d Low Volt. Disconnect Volt. 46
-              0x11D0   // 900E Discharging Limit Voltage 45,6
-          };
+          #std::vector<uint16_t> battery_settings1 = {
+          #    0,       // 9000 Battery Type 0 =  User
+          #    0x0064,  // 9001 Battery Cap == 100AH
+          #    0x012C,  // 9002 Temp compensation -3V /°C/2V
+          #    0x155E,  // 9003 0x5DC == 1367 Over Voltage Disconnect Voltage 54,7
+          #    0x150E,  // 9004 0x58C == 1350 Charging Limit Voltage 53,9
+          #    0x150E,  // 9005 Over Voltage Reconnect Voltage 53,9
+          #    0x14E6,  // 9006 Equalize Charging Voltage 53,5
+          #    0x14E6,  // 9007 Boost Charging Voltage 53,5
+          #    0x14B4,  // 9008 Float Charging Voltage 53
+          #    0x13C4,   // 9009 Boost Reconnect Charging Voltage 50,6
+          #    0x12C0,  // 900A Low Voltage Reconnect Voltage 48
+          #    0x13B0,  // 900B Under Voltage Warning Reconnect Voltage 50,4
+          #    0x1360,  // 900c Under Volt. Warning Volt 49,6
+          #    0x11F8,  // 900d Low Volt. Disconnect Volt. 46
+          #    0x11D0   // 900E Discharging Limit Voltage 45,6
+          #};
           // Boost and equalization periods
           std::vector<uint16_t> battery_settings3 = {
               0x0000,  // 906B Equalize Duration (min.) 0
