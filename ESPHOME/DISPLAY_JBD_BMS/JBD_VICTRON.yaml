@@ -1,0 +1,1245 @@
+substitutions:
+  mac_address: a5:32:37:24:77:e6 #AQUÍ TIENES QUE PONER LA MAC DE TU BATERÍA (las letras en minúsculas)
+  name: BATERIA
+  titulo_pantalla: "Bateria" #Aquí pon entre las comillas lo que quieras que aparezca en la primera línea del display
+  smart_mppt_mac_address:  c8:73:c6:15:24:75
+  #smart_shunt_mac_address: F8:B4:AA:8F:9D:35
+  #smart_shunt_encryption_key: 0df4d0395b7d1a876c0c33ecb9e70dcd
+  smart_mppt_encryption_key:  719643da14549729b9376e46d8cee8d1
+  smart_solar_mac_address: c4:C8:f6:Bd:1c:F9
+  smart_solar_encryption_key: 0919172ba81d5afa52dacc5fa617441e
+  
+  
+external_components: #Esto es obligatorio, para que descargue lel componente necesario para la comunicación entre el BMS y el ESP32
+  - source: github://syssi/esphome-jbd-bms@main
+    refresh: 0s
+  - source: github://Fabian-Schmidt/esphome-victron_ble
+  - source: github://KinDR007/VictronMPPT-ESPHOME@main
+
+esphome:
+  name: jc3248w535v
+  friendly_name: Battery Monitoring Display
+  platformio_options:
+    upload_speed: 921600
+    board_build.flash_mode: dio
+    board_build.f_flash: 80000000L
+    board_build.f_cpu: 240000000L
+  on_boot:
+    priority: -10
+    then:
+      - light.turn_on:
+          id: backlight_light
+          brightness: 100%
+
+esp32:
+  board: esp32-s3-devkitc-1
+  flash_size: 16MB
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240: "y"
+      CONFIG_ESP32S3_DATA_CACHE_64KB: "y"
+      CONFIG_ESP32S3_DATA_CACHE_LINE_64B: "y"
+      CONFIG_SPIRAM_FETCH_INSTRUCTIONS: y
+      CONFIG_SPIRAM_RODATA: y
+
+psram:
+  mode: octal
+  speed: 80MHz
+
+logger:
+  baud_rate: 921600
+
+esp32_ble_tracker:
+
+ble_client:
+  - id: client0
+    mac_address: ${mac_address}
+
+jbd_bms_ble:
+  - id: bms0
+    ble_client_id: client0
+    update_interval: 5s
+victron_ble:
+  #- id: MySmartShunt
+  #  mac_address: ${smart_shunt_mac_address}
+  #  bindkey: ${smart_shunt_encryption_key}
+#
+  #  # Advanced users can use `on_*_message` action. The data is in the `message` variable.
+  #  on_battery_monitor_message:
+  #    - logger.log: "Message from Battery Monitor."
+  #  on_solar_charger_message:
+  #    - logger.log: "Message from Solar Charger."
+  #  on_inverter_message:
+  #    - logger.log: "Message from Inverter."
+  #  on_dcdc_converter_message:
+  #    - logger.log: "Message from DC/DC Converter."
+  #  on_smart_lithium_message:
+  #    - logger.log: "Message from Smart Lithium."
+  #  on_inverter_rs_message:
+  #    - logger.log: "Message from Inverter RS."
+  #  on_smart_battery_protect_message:
+  #    - logger.log: "Message from Smart Battery Protect."
+  #  on_lynx_smart_bms_message:
+  #    - logger.log: "Message from Lynx Smart BMS."
+  #  on_multi_rs_message:
+  #    - logger.log: "Message from Multi RS."
+  #  on_ve_bus_message:
+  #    - logger.log: "Message from VE.Bus."
+  #  on_dc_energy_meter_message:
+  #    - logger.log: "Message from DC Energy Meter."
+
+  - id: MySmartSolar
+    mac_address: ${smart_solar_mac_address}
+    bindkey: ${smart_solar_encryption_key}
+
+  - id: MySmartmppt
+    mac_address: ${smart_mppt_mac_address}
+    bindkey: ${smart_mppt_encryption_key}
+    
+
+spi:
+  id: display_qspi
+  type: quad
+  clk_pin: 47
+  data_pins: [21, 48, 40, 39]
+
+i2c:
+  sda: 4
+  scl: 8
+  id: touchscreen_bus
+
+display:
+  - platform: qspi_dbi
+    model: AXS15231
+    data_rate: 40MHz
+    id: my_display
+    spi_id: display_qspi
+    dimensions:
+      height: 480
+      width: 320
+    cs_pin: 45
+    rotation: 90
+    auto_clear_enabled: false
+
+output:
+  - platform: ledc
+    pin: GPIO1
+    id: backlight
+
+light:
+  - platform: monochromatic
+    output: backlight
+    name: "Backlight Light" 
+    restore_mode: ALWAYS_ON
+    id: backlight_light
+
+touchscreen:
+  - platform: axs15231
+    id: my_touch
+    display: my_display
+    i2c_id: touchscreen_bus
+    transform:
+      swap_xy: true
+    on_release:
+      - if:
+          condition: lvgl.is_paused
+          then:
+            - logger.log: "LVGL resuming"
+            - lvgl.resume:
+            - lvgl.widget.redraw:
+            - light.turn_on: backlight_light
+number:
+  - platform: template
+    name: LVGL Screen timeout
+    optimistic: true
+    id: display_timeout
+    unit_of_measurement: "s"
+    initial_value: 45
+    restore_value: true
+    min_value: 10
+    max_value: 180
+    step: 5
+    mode: box
+
+lvgl:
+  draw_rounding: 8
+  displays: my_display
+  touchscreens: my_touch
+  bg_color: 0x000000  # Fondo negro
+  border_width: 0
+  outline_width: 0
+  on_idle:
+    timeout: !lambda "return (id(display_timeout).state * 1000);"
+    then:
+      - logger.log: "LVGL is idle"
+      - light.turn_off: backlight_light
+      - lvgl.pause:
+  theme:
+    bar:
+      radius: 0
+      indicator:
+        radius: 0
+        arc_color: red
+    label:
+      bg_color: 0x000000  # Fondo negro
+      text_color: 0xFFFFFF  # Texto blanco
+      opa: 100%
+
+  pages:
+    - id: main_page
+      on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+      widgets:
+        - label:
+            align: TOP_MID
+            y: 5
+            text: ${titulo_pantalla}
+            text_font: montserrat_30
+            text_color: 0xFFA500
+        
+        - label:
+            align: TOP_LEFT
+            x: 10
+            y: 50
+            id: label_voltage
+            text: 'V'
+            text_font: montserrat_30
+        - label:
+            align: TOP_RIGHT
+            x: -10
+            y: 50
+            id: label_soc
+            text: '%'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_LEFT
+            x: 15
+            y: 190
+            id: label_current
+            text: 'A'
+            text_font: montserrat_30
+
+        - label:
+            align: TOP_MID
+            y: 80
+            id: label_temp
+            text: 'Temperatura: -- °C'
+            text_font: montserrat_26
+
+        # Gráfica circular de potencia
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            align: TOP_MID
+            y: 140
+            width: 220
+            height: 180
+            bg_color: 0x000000
+            border_width: 0
+            pad_all: 4
+            widgets:
+              - meter:
+                  id: meter_obj
+                  height: 100%
+                  width: 100%
+                  border_width: 0
+                  bg_opa: TRANSP
+                  align: CENTER
+                  scales:
+                    - range_from: -2000
+                      range_to: 2000
+                      angle_range: 180  # Semicírculo
+                      rotation: 180    # Parte inferior
+                      ticks:
+                        count: 0
+                      indicators:
+                        - line:
+                            id: val_needle
+                            width: 4
+                            r_mod: 10
+                            value: 0
+                            color: 0x0082FC
+                        - arc:
+                            color: 0xFF0000  # Rojo
+                            r_mod: 8
+                            width: 25
+                            start_value: -2000
+                            end_value: -1600
+                        - arc:
+                            color: 0xFFA500  # Naranja
+                            r_mod: 8
+                            width: 25
+                            start_value: -1600
+                            end_value: -1200
+                        - arc:
+                            color:  0xFFFF00  # Amarillo
+                            r_mod: 8
+                            width: 25
+                            start_value: -1200
+                            end_value: 0
+                        - arc:
+                            color: 0x00FF00  # verde inicial
+                            r_mod: 8
+                            width: 25
+                            start_value: 0
+                            end_value: 1200
+                        - arc:
+                            color: 0x32CD32  # Verde claro
+                            r_mod: 8
+                            width: 25
+                            start_value: 1200
+                            end_value: 1600
+                        - arc:
+                            color: 0x006400  # Verde oscuro
+                            r_mod: 8
+                            width: 25
+                            start_value: 1600
+                            end_value: 2000
+
+
+        - label:
+            align: TOP_RIGHT
+            x: -5
+            y: 190
+            id: label_power
+            text: 'W'
+            text_font: montserrat_30
+
+        # Sensores binarios de estado
+        - label:
+            align: CENTER
+            x: 160
+            y: 140
+            text: "Carga:"
+            text_font: montserrat_20
+        - led:
+            align: RIGHT_MID
+            x: -10
+            y: 140
+            id: led_charging
+            color: 0x00ff00                      
+        - label:
+            align: LEFT_MID
+            x: 0
+            y: 140
+            text: "Descarga:"
+            text_font: montserrat_20
+        - led:
+            align: LEFT_MID
+            x: 110
+            y: 140
+            id: led_discharging
+            color: 0x00ff00
+
+        - label:
+            align: TOP_MID
+            y: 50
+            id: capacity
+            text: 'Restante: -- Ah'
+            text_font: montserrat_26
+
+        - label:
+            align: TOP_LEFT
+            y: 130
+            id: label_voltage1
+            text: 'Celda 1: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 130
+            id: label_voltage2
+            text: 'Celda 2: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_LEFT
+            y: 160
+            id: label_voltage3
+            text: 'Celda 3: -- V'
+            text_font: montserrat_20
+
+        - label:
+            align: TOP_RIGHT
+            y: 160
+            id: label_voltage4
+            text: 'Celda 4: -- V'
+            text_font: montserrat_20
+            
+        - label:
+            align: CENTER
+            x: -5        # Centrado en el eje X
+            y: 140      # Posición en el eje Y
+            id: label_balancing
+            text: "Balance"
+            text_font: montserrat_20
+            text_color: 0x00FF00  # Verde para activo
+            
+        - label:
+            align: CENTER
+            x: 0
+            y: 8
+            id: label_center_text
+            text: "-      +"
+            text_font: montserrat_30
+            text_color: 0x0000FF  # Azul 
+    - id: main_page2
+      
+      widgets:
+        # Shore
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: shore
+            x: 7
+            y: 7
+            width: 141
+            height: 155
+            bg_color: red
+            #children:
+            # - type: label
+            #   text: "Shore\n-- W"
+            #   x: 5
+            #   y: 5
+        - label:
+            x: 15
+            y: 15
+            id: label_shore
+            text: 'Booster'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 45
+            id: label_shore_power
+            text: '-- W'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 75
+            id: label_charger
+            text: 'Charger'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 105
+            id: label_charger_power
+            text: '-- W'
+            text_font: montserrat_20       
+         # Inverters
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: inverters
+            x: 169
+            y: 30
+            width: 141
+            height: 100
+            bg_color: blue
+            #children:
+            #  - type: label
+            #    text: "Inverters"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 175
+            y: 37
+            id: label_inverters
+            text: 'Inversor'
+            text_font: montserrat_20
+        - label:
+            x: 175
+            y: 67
+            id: label_inversor_power
+            text: '-- W'
+            text_font: montserrat_20
+         # AC Load
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: ac
+            x: 333
+            y: 7
+            width: 141
+            height: 155
+            bg_color: green
+            #children:
+            #  - type: label
+            #    text: "AC Load\n-- W"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 340
+            y: 15
+            id: label_acload
+            text: 'AC Load'
+            text_font: montserrat_20
+        - label:
+            x: 340
+            y: 45
+            id: label_acload_power
+            text: '-- W'
+            text_font: montserrat_20
+         # Batteries (DC)
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: dc
+            x: 7
+            y: 177
+            width: 141
+            height: 140
+            bg_color: blue
+            #children:
+            #  - type: label
+            #    text: "Batteries\n--%"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 15
+            y: 180
+            id: label_batteries
+            text: 'Bateria'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 200
+            id: label_battery_voltage
+            text: '-- V'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 220
+            id: label_battery_current
+            text: '-- A'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 260
+            id: label_battery_state_charge
+            text: '-- %'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 280
+            id: label_battery_power
+            text: '-- W'
+            text_font: montserrat_20
+         # DC Load
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: dc_ld
+            x: 169
+            y: 237
+            width: 141
+            height: 80
+            bg_color: teal
+            #children:
+            #  - type: label
+            #    text: "DC Load\n-- W"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 175
+            y: 252
+            id: label_dcload
+            text: 'DC Load'
+            text_font: montserrat_20
+        - label:
+            x: 175
+            y: 282
+            id: label_dcload_power
+            text: '-- W'
+            text_font: montserrat_20
+        - label:
+            align: top_mid
+            text: 'MPPT1'
+            text_font: montserrat_12
+         # PV Panel
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: pv
+            x: 333
+            y: 177
+            width: 141
+            height: 140
+            bg_color: orange
+            #children:
+            #  - type: label
+            #    text: "PV\n-- W"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 340
+            y: 195
+            id: label_pv
+            text: 'PV'
+            text_font: montserrat_20
+        - label:
+            x: 340
+            y: 225
+            id: label_pv_power
+            text: '-- W'
+            text_font: montserrat_20
+        - label:
+            x: 340
+            y: 245
+            id: label_mppt_victron0
+            text: 'Hoy: -- kWh'
+            text_font: montserrat_20
+            #text_color: 0x00FF00
+
+        
+         # Líneas de conexión
+        #- obj:
+        #    id: line1
+        #    x: 98
+        #    y: 112
+        #    width: 94
+        #    height: 110
+        - line:
+            points:
+              - 75, 162
+              - 75, 177
+            line_width: 12
+            line_color: blue
+            line_rounded: true
+        - line:
+           points:
+             - 312, 90
+             - 333, 90
+           line_width: 12
+           line_color: blue
+           line_rounded: true
+        - line:
+            points:
+              - 147, 304
+              - 168, 304
+            line_width: 12
+            line_color: blue
+            line_rounded: true
+        - line:
+            points:
+              - 147, 215
+              - 333, 215
+            line_width: 12
+            line_color: blue
+            line_rounded: true
+        - line:
+           points:
+             - 240, 130
+             - 240, 215
+           line_width: 12
+           line_color: blue
+           line_rounded: true
+        #- line:
+        #    points: [[160, 102], [160, 150]]
+        #    style:
+        #      width: 8
+        #      color: blue
+    - id: main_page3
+      on_press:
+        - lvgl.page.next:
+            animation: OUT_LEFT
+            time: 1000ms
+      widgets:
+        # Shore
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: shore2
+            x: 7
+            y: 7
+            width: 141
+            height: 155
+            bg_color: red
+            #children:
+            # - type: label
+            #   text: "Shore\n-- W"
+            #   x: 5
+            #   y: 5
+        - label:
+            x: 15
+            y: 15
+            id: label_shore2
+            text: 'Booster'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 45
+            id: label_shore2_power
+            text: '-- W'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 75
+            id: label_charger2
+            text: 'Charger'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 105
+            id: label_charger2_power
+            text: '-- W'
+            text_font: montserrat_20       
+         # Inverters
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: inverters2
+            x: 169
+            y: 30
+            width: 141
+            height: 100
+            bg_color: blue
+            #children:
+            #  - type: label
+            #    text: "Inverters"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 175
+            y: 37
+            id: label_inverters2
+            text: 'Inversor'
+            text_font: montserrat_20
+        - label:
+            x: 175
+            y: 67
+            id: label_inversor2_power
+            text: '-- W'
+            text_font: montserrat_20
+         # AC Load
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: ac2
+            x: 333
+            y: 7
+            width: 141
+            height: 155
+            bg_color: green
+            #children:
+            #  - type: label
+            #    text: "AC Load\n-- W"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 340
+            y: 15
+            id: label_acload2
+            text: 'AC Load'
+            text_font: montserrat_20
+        - label:
+            x: 340
+            y: 45
+            id: label_acload2_power
+            text: '-- W'
+            text_font: montserrat_20
+         # Batteries (DC)
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: dc2
+            x: 7
+            y: 177
+            width: 141
+            height: 140
+            bg_color: blue
+            #children:
+            #  - type: label
+            #    text: "Batteries\n--%"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 15
+            y: 180
+            id: label_batteries2
+            text: 'Bateria'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 200
+            id: label_battery2_voltage
+            text: '-- V'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 220
+            id: label_battery2_current
+            text: '-- A'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 260
+            id: label_battery2_state_charge
+            text: '-- %'
+            text_font: montserrat_20
+        - label:
+            x: 15
+            y: 280
+            id: label_battery2_power
+            text: '-- W'
+            text_font: montserrat_20
+         # DC Load
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: dc_ld2
+            x: 169
+            y: 237
+            width: 141
+            height: 80
+            bg_color: teal
+            #children:
+            #  - type: label
+            #    text: "DC Load\n-- W"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 175
+            y: 252
+            id: label_dcload2
+            text: 'DC Load'
+            text_font: montserrat_20
+        - label:
+            x: 175
+            y: 282
+            id: label_dcload2_power
+            text: '-- W'
+            text_font: montserrat_20
+        - label:
+            align: top_mid
+            text: 'MPPT2'
+            text_font: montserrat_12
+         # PV Panel
+        - obj:
+            on_press:
+              - lvgl.page.next:
+                  animation: OUT_LEFT
+                  time: 1000ms
+            id: pv2
+            x: 333
+            y: 177
+            width: 141
+            height: 140
+            bg_color: orange
+            #children:
+            #  - type: label
+            #    text: "PV\n-- W"
+            #    x: 5
+            #    y: 5
+        - label:
+            x: 340
+            y: 195
+            id: label_pv2
+            text: 'PV'
+            text_font: montserrat_20
+        - label:
+            x: 340
+            y: 225
+            id: label_pv2_power
+            text: '-- W'
+            text_font: montserrat_20
+        - label:
+            x: 340
+            y: 245
+            id: label_mppt2_victron0
+            text: 'Hoy: -- kWh'
+            text_font: montserrat_20
+            #text_color: 0x00FF00
+         # Líneas de conexión
+        #- obj:
+        #    id: line1
+        #    x: 98
+        #    y: 112
+        #    width: 94
+        #    height: 110
+        - line:
+            points:
+              - 75, 162
+              - 75, 177
+            line_width: 12
+            line_color: blue
+            line_rounded: true
+        - line:
+           points:
+             - 312, 90
+             - 333, 90
+           line_width: 12
+           line_color: blue
+           line_rounded: true
+        - line:
+            points:
+              - 147, 304
+              - 168, 304
+            line_width: 12
+            line_color: blue
+            line_rounded: true
+        - line:
+            points:
+              - 147, 215
+              - 333, 215
+            line_width: 12
+            line_color: blue
+            line_rounded: true
+        - line:
+           points:
+             - 240, 130
+             - 240, 215
+           line_width: 12
+           line_color: blue
+           line_rounded: true
+        #- line:
+        #    points: [[160, 102], [160, 150]]
+        #    style:
+        #      width: 8
+        #      color: blue
+
+
+
+binary_sensor:
+  - platform: jbd_bms_ble
+    jbd_bms_ble_id: bms0
+    balancing:
+      name: "${name} balanceando"
+      id: balancing
+    charging:
+      name: "${name} MOS carga"
+      id: charging
+    discharging:
+      name: "${name} MOS descarga"
+      id: discharging
+
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "Battery has Alarm"
+  #  type: ALARM
+
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "MPPT is in Fault state"
+    type: DEVICE_STATE_FAULT
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "MPPT has Error"
+    type: CHARGER_ERROR
+
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "MPPT is in Fault state"
+    type: DEVICE_STATE_FAULT
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "MPPT has Error"
+    type: CHARGER_ERROR
+
+text_sensor:
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "Battery Alarm reason"
+  #  type: ALARM_REASON
+
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "MPPT state"
+    type: DEVICE_STATE
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "MPPT Error reason"
+    type: CHARGER_ERROR
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "MPPT state"
+    type: DEVICE_STATE
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "MPPT Error reason"
+    type: CHARGER_ERROR
+
+sensor:
+  - platform: jbd_bms_ble
+    jbd_bms_ble_id: bms0
+    current:
+      name: "${name} current"
+      id: bms_current
+    power:
+      name: "${name} power"
+      id: bms_power
+    state_of_charge:
+      name: "${name} state of charge"
+      id: bms_soc
+    total_voltage:
+      name: "${name} total voltage"
+      id: bms_voltage
+    temperature_1:
+      name: "${name} temperature 1"
+      id: bms_temp
+    capacity_remaining:
+      name: "${name} capacity remaining"
+      id: remaining
+    min_cell_voltage:
+      name: "${name} min cell voltage"
+    max_cell_voltage:
+      name: "${name} max cell voltage"
+    cell_voltage_1:
+      name: "${name} cell voltage 1"
+      id: voltage1
+    cell_voltage_2:
+      name: "${name} cell voltage 2"
+      id: voltage2
+    cell_voltage_3:
+      name: "${name} cell voltage 3"
+      id: voltage3
+    cell_voltage_4:
+      name: "${name} cell voltage 4"
+      id: voltage4
+  # MySmartShunt
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "Time remaining"
+  #  type: TIME_TO_GO
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "Battery voltage"
+  #  type: BATTERY_VOLTAGE
+  #  id: battery_voltage
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "Starter Battery"
+  #  # BAUX_VOLTAGE or MID_VOLTAGE or TEMPERATURE.
+  #  # Depending on configuration of SmartShunt
+  #  type: AUX_VOLTAGE
+  #  id: battery_aux_voltage
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "Current"
+  #  type: BATTERY_CURRENT
+  #  id: battery_current
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "Consumed Ah"
+  #  type: CONSUMED_AH
+  #- platform: victron_ble
+  #  victron_ble_id: MySmartShunt
+  #  name: "State of charge"
+  #  type: STATE_OF_CHARGE
+  #  id: battery_state_charge
+
+  # MySmartmppt
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "Battery Voltage"
+    type: BATTERY_VOLTAGE
+    id: mppt2_battery_voltage
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "Battery Current"
+    type: BATTERY_CURRENT
+    id: mppt2_battery_current
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "Yield Today"
+    type: YIELD_TODAY
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "PV Power"
+    type: PV_POWER
+    id: pv2_power
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "Load Current"
+    type: LOAD_CURRENT
+    id: mppt2_battery_load_current
+  - platform: victron_ble
+    victron_ble_id: MySmartmppt
+    name: "${name} yield today"
+    type: YIELD_TODAY
+    id: mppt2_victron0
+
+  # MySmartSolar
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "Battery Voltage"
+    type: BATTERY_VOLTAGE
+    id: mppt_battery_voltage
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "Battery Current"
+    type: BATTERY_CURRENT
+    id: mppt_battery_current
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "Yield Today"
+    type: YIELD_TODAY
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "PV Power"
+    type: PV_POWER
+    id: pv_power
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "Load Current"
+    type: LOAD_CURRENT
+    id: mppt_battery_load_current
+
+  - platform: victron_ble
+    victron_ble_id: MySmartSolar
+    name: "${name} yield today"
+    type: YIELD_TODAY
+    id: mppt_victron0
+
+
+switch:
+  - platform: jbd_bms_ble
+    jbd_bms_ble_id: bms0
+    charging:
+      name: "${name} MOS carga"
+      id: swcarga
+    discharging:
+      name: "${name} MOS descarga"
+      id: swdescarga
+
+# Optional Lambda to update LVGL widgets
+interval:
+  - interval: 2s
+    then:
+      - lambda: |-
+          char str_buffer[50];  // Buffer para formatear strings
+          
+          if (id(bms_soc).has_state()) {
+            float soc = id(bms_soc).state;
+            if (soc >= 0 && soc <= 100) {
+              lv_label_set_text(id(label_soc), (to_string((int)soc) + "%").c_str());
+            } else {
+              lv_label_set_text(id(label_soc), "--%");  // Added % symbol here
+            }
+          } else {
+            lv_label_set_text(id(label_soc), "--%");  // Added % symbol here
+          }
+
+          if (id(bms_power).has_state()) {
+            lv_meter_set_indicator_value(id(meter_obj), id(val_needle), -(int)id(bms_power).state);
+            snprintf(str_buffer, sizeof(str_buffer), "%.0f W", id(bms_power).state);
+            lv_label_set_text(id(label_power), str_buffer);
+          }
+
+          // Actualización de LEDs de estado binario
+
+          if (id(charging).state) {
+            lv_led_on(id(led_charging));
+          } else {
+            lv_led_off(id(led_charging));
+          }
+
+          if (id(discharging).state) {
+            lv_led_on(id(led_discharging));
+          } else {
+            lv_led_off(id(led_discharging));
+          }
+
+          if (id(bms_voltage).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f V", id(bms_voltage).state);
+            lv_label_set_text(id(label_voltage), str_buffer);
+          }
+
+          if (id(bms_current).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "%.1f A", id(bms_current).state);
+            lv_label_set_text(id(label_current), str_buffer);
+          }
+
+          if (id(bms_temp).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Temperatura: %.1f °C", id(bms_temp).state);
+            lv_label_set_text(id(label_temp), str_buffer);
+          }
+
+          if (id(remaining).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Restante: %.0f Ah", id(remaining).state);
+            lv_label_set_text(id(capacity), str_buffer);
+          }
+
+          // Voltajes individuales de celdas
+          if (id(voltage1).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 1:  %.2f V", id(voltage1).state);
+            lv_label_set_text(id(label_voltage1), str_buffer);
+          }
+          if (id(voltage2).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 2:  %.2f V", id(voltage2).state);
+            lv_label_set_text(id(label_voltage2), str_buffer);
+          }
+          if (id(voltage3).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 3:  %.2f V", id(voltage3).state);
+            lv_label_set_text(id(label_voltage3), str_buffer);
+          }
+          if (id(voltage4).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), "Celda 4:  %.2f V", id(voltage4).state);
+            lv_label_set_text(id(label_voltage4), str_buffer);
+          }
+          if (id(mppt_battery_voltage).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), " %.2f V", id(mppt_battery_voltage).state);
+            lv_label_set_text(id(label_battery_voltage), str_buffer);
+          }
+          if (id(mppt_battery_current).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), " %.2f A", id(mppt_battery_current).state);
+            lv_label_set_text(id(label_battery_current), str_buffer);
+          }
+          
+          if (id(pv_power).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), " %.2f W", id(pv_power).state);
+            lv_label_set_text(id(label_pv_power), str_buffer);
+          }
+          if (id(mppt2_battery_voltage).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), " %.2f V", id(mppt2_battery_voltage).state);
+            lv_label_set_text(id(label_battery2_voltage), str_buffer);
+          }
+          if (id(mppt2_battery_current).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), " %.2f A", id(mppt2_battery_current).state);
+            lv_label_set_text(id(label_battery2_current), str_buffer);
+          }
+          
+          if (id(pv2_power).has_state()) {
+            snprintf(str_buffer, sizeof(str_buffer), " %.2f W", id(pv2_power).state);
+            lv_label_set_text(id(label_pv2_power), str_buffer);
+          }
+           // Producción de hoy
+          if (id(mppt_victron0).has_state()) {
+            float aux = id(mppt_victron0).state * 1000;
+            snprintf(str_buffer, sizeof(str_buffer), "Hoy: %.2f Wh", aux);
+            lv_label_set_text(id(label_mppt_victron0), str_buffer);
+           }
+          if (id(mppt2_victron0).has_state()) {
+            float aux2 = id(mppt2_victron0).state * 1000;
+            snprintf(str_buffer, sizeof(str_buffer), "Hoy: %.2f Wh", aux2);
+            lv_label_set_text(id(label_mppt2_victron0), str_buffer);
+          }
+
+    
