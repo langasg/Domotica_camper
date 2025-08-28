@@ -18,3 +18,5 @@
 #### [ESP32 LEVEL](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/esp32_level/README.md)
 
 #### [ESP32 EPEVER](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/esphome_epever/README.md)
+
+#### [ESP32 DISPLAY JBD & VICTRON](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/DISPLAY_JBD_BMS/README.md)
