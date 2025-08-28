@@ -843,20 +843,20 @@ logger:
 # Enable Home Assistant API
 api:
   encryption:
-    key: "OiY201niA0wjIuFkhlnVsJ9lreslzLf1JnKowhlRQbg="
+    key: "XXXXXXXXX"
 
 ota:
   - platform: esphome
-    password: "b6d271817b485d6d77d445b79d918bf4"
+    password: "XXXXXXXXX"
 
 wifi:
-  ssid: TP-LINK_POCKET
-  password: elenitis
+  ssid: XXXXXXXXX
+  password: XXXXXXXXX
   #fast_connect: true
   #domain: .lan
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Solar-Monitor Fallback Hotspot"
-    password: "elenitis"
+    password: "XXXXXXXXX"
 
 captive_portal:
