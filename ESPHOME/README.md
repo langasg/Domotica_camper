@@ -22,4 +22,5 @@
 #### [ESP32 DISPLAY JBD & VICTRON](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/DISPLAY_JBD_BMS/README.md)
 
 #### [ESP32 CAMERA](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/ESPCAMERA/README.md)
-#### [ESP32 SHUNT JUNCTEK](
+
+#### [ESP32 SHUNT JUNCTEK](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Junctek/README.md)
