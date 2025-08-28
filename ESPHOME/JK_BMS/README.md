@@ -23,7 +23,7 @@
         - Mediante Bluetooth --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/JK_BMS_ble_block_traffic.md)
 
      - Bloqueo de Bluetooth -->  (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/JK_BMS_ble_block_traffic.md))
-     - DISPLAY ESP32 
+     - DISPLAY ESP32 --> https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/DISPLAY_JK_2BMS.yaml
       
 ## Fuentes
 
