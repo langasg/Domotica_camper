@@ -9,7 +9,7 @@
 
 ### Sensor sonda https://s.click.aliexpress.com/e/_oogioEt
 
-PASOS
-1. Descargar codigo yaml
+## PASOS
+1. Descargar codigo --> yaml https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/esp32_water_meter/esp32-water-meter.yaml
 2. Modificar variables con datos XXXXXX segun corresponda
-3. Flashear esp32. Para esto puedes seguir estos tutoriales (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/README.md)
+3. Flashear esp32. Para esto puedes seguir estos tutoriales --> https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/README.md
