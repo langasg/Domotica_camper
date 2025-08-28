@@ -13,4 +13,3 @@ PASOS
 1. Descargar codigo yaml
 2. Modificar variables con datos XXXXXX segun corresponda
 3. Flashear esp32. Para esto puedes seguir estos tutoriales
-   - 
