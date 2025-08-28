@@ -23,3 +23,5 @@
 #### [JBD BMS](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/README.md)
 
 ### [JK BMS](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JK_BMS/README.md)
+
+### [ESP32 WATER METER](https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/esp32_water_meter/README.md)
