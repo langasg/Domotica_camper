@@ -28,7 +28,7 @@
         - Mediante Cable --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/JBD_BMS_HA.md)
         - Mediante Bluetooth --> (https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/JBD_BMS_HA_ble.md)
            
-     
+     - DISPLAY ESP32 --> https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/JBD_BMS/jbd-bms-display.yaml
   
         
 ### Fuentes
