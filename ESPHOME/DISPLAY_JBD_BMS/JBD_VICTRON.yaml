@@ -2,12 +2,12 @@ substitutions:
   mac_address: a5:32:37:24:77:e6 #AQUÍ TIENES QUE PONER LA MAC DE TU BATERÍA (las letras en minúsculas)
   name: BATERIA
   titulo_pantalla: "Bateria" #Aquí pon entre las comillas lo que quieras que aparezca en la primera línea del display
-  smart_mppt_mac_address:  c8:73:c6:15:24:75
-  #smart_shunt_mac_address: F8:B4:AA:8F:9D:35
-  #smart_shunt_encryption_key: 0df4d0395b7d1a876c0c33ecb9e70dcd
-  smart_mppt_encryption_key:  719643da14549729b9376e46d8cee8d1
-  smart_solar_mac_address: c4:C8:f6:Bd:1c:F9
-  smart_solar_encryption_key: 0919172ba81d5afa52dacc5fa617441e
+  smart_mppt_mac_address:  XXXXXXXX
+  #smart_shunt_mac_address: F8:B4:AA:8F:9D:XX
+  #smart_shunt_encryption_key: 0df4d0395b7d1a876c3XXXecb9e70dcd
+  smart_mppt_encryption_key:  XXXXX
+  smart_solar_mac_address: XXXXX
+  smart_solar_encryption_key: 0XXXXXX
   
   
 external_components: #Esto es obligatorio, para que descargue lel componente necesario para la comunicación entre el BMS y el ESP32
