@@ -1,11 +1,12 @@
 esphome:
   name: esp32-water-meter
   friendly_name: esp32-water-meter
-
+  
 esp32:
-  board: esp32dev
+  board: esp32-c3-devkitm-1
+  variant: esp32c3
   framework:
-    type: arduino
+    type: esp-idf
 
 # Enable logging
 logger:
@@ -13,41 +14,95 @@ logger:
 # Enable Home Assistant API
 api:
   encryption:
-    key: ""
+    key: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 ota:
   - platform: esphome
-    password: ""
+    password: "XXXXXXXXXXXXXXXXXXXXXXXX"
 
 wifi:
-  ssid: XXXXXXXXXXX
+  ssid: XXXXXXXXXXXXXXXX
   password: XXXXXXXXXXXXXX
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Esp32-Water-Meter"
-    password: ""
+    ssid: "esp32-water-meter Fallback Hotspot"
+    password: "XXXXXXXXXXXXXX"
+    
+web_server:
+  port: 80
+  
+# Si no usas la api de Homeassitant se debe habilitar el bloque mqtt y deshabilitar el de api
+# Example configuration entry
+#mqtt:
+#  broker: 10.0.0.2
+#  username: livingroom
+#  password: XXXXXXXXX  
 
 captive_portal:
 
-
-#uart:
-#  id: uart_1
-#  tx_pin: GPIO17
-#  rx_pin: GPIO16
-#  baud_rate: 9600
-
 sensor:
-  #- platform: "jsn_sr04t"
-  #  name: "Distance"
-  #  #model: "aj_sr04m"
-  #  update_interval: 1s
-  #  uart_id: uart_1
-  - platform: ultrasonic
-    trigger_pin: GPIO17
-    echo_pin: GPIO16
-    name: "Ultrasonic Sensor"
-    pulse_time: 20us
-    update_interval: 30s 
-    
-    
+  # SENSOR 1 – Voltaje crudo leído desde la boya resistiva
+  - platform: adc
+    pin: GPIO01                  # 📍 Pin analógico del ESP32 conectado al divisor de tensión
+    name: "voltaje boya"
+    id: voltaje_boya
+    attenuation: 12db            # 🎚️ Configura el rango de lectura del ADC (12 dB = máx. 3.3 V)
+    update_interval: 5s          # ⏱️ Cada cuántos segundos se hace una medición
+    accuracy_decimals: 2         # 🔍 Solo muestra 2 decimales para evitar ruido excesivo
+    filters:
+      - exponential_moving_average:
+          alpha: 0.05            # 📊 Suaviza variaciones rápidas para una lectura más estable
+          send_every: 1
+
+  # SENSOR 2 – Porcentaje de agua calculado linealmente a partir del voltaje
+  - platform: template
+    name: "nivel de agua ESP"
+    update_interval: 5s
+    unit_of_measurement: "%"
+    accuracy_decimals: 1
+    lambda: |-
+      // Leer el voltaje actual, redondear a 2 decimales
+      float v = round(id(voltaje_boya).state * 100.0f) / 100.0f;
+      float porcentaje = 0.0f;
+
+      // Ajustar aquí el valor máximo de voltaje según la resistencia y boya usada
+      float voltaje_maximo = 1.622f; // 🔁 CAMBIAR si en tu boya el máximo es distinto
+
+      // Calcular porcentaje lineal entre 0 V (0%) y voltaje_maximo (100%)
+      //porcentaje = (v / voltaje_maximo) * 100.0f;
+
+      // Limitar el resultado a entre 0% y 100%
+      //porcentaje = std::min(std::max(porcentaje, 0.0f), 100.0f);
+      porcentaje = (v) / (1.622) * 100.0f;
+      // Mostrar en logs de Home Assistant
+      ESP_LOGD("custom", "Voltaje leído: %.2f V → %.1f %%", v, porcentaje);
+      return porcentaje;
+  # SENSOR 2 – Porcentaje de agua calculado linealmente a partir del voltaje
+ # Sensor en pruebas al comprobar que el Voltaje no es linea debido al divisor de tension y que una de sus variables varia, por lo cual es mejor calcular el valor de la resistencia.
+  - platform: template
+    name: "nivel de agua resistencia ESP"
+    update_interval: 5s
+    id: resistencia_boya
+    unit_of_measurement: "Ω"
+    accuracy_decimals: 1
+    lambda: |-
+      // Leer el voltaje actual, redondear a 2 decimales
+      
+      float V = id(voltaje_boya).state;
+      float resistencia=(V * 200.0) / (3.3 - V);
+      return resistencia;
+# Sensor en pruebas al comprobar que el Voltaje no es linea debido al divisor de tension y que una de sus variables varia, por lo cual es mejor calcular el valor de la resistencia.
+  - platform: template
+    name: "nivel de agua resistivo %  ESP"
+    update_interval: 5s
+    unit_of_measurement: "%"
+    accuracy_decimals: 1
+    lambda: |-
+      // Leer el voltaje actual, redondear a 2 decimales
+      float resistencia= id(resistencia_boya).state;
+      float porcentaje = 0.0f;
+      porcentaje = ((resistencia) / (196)) * 100.0;
+      // Mostrar en logs de Home Assistant
+      ESP_LOGD("custom", "Voltaje leído: %.2f Ω → %.1f %%", resistencia, porcentaje);
+      return porcentaje;
