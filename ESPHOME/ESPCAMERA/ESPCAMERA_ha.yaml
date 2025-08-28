@@ -13,21 +13,21 @@ logger:
 # Enable Home Assistant API
 api:
   encryption:
-    key: ""
+    key: "XXXXXXX"
 
 ota:
   - platform: esphome
-    password: "password"
+    password: "XXXXXXX"
 
 wifi:
-  ssid: "TP-LINK_POCKET"
-  password: "password"
+  ssid: "XXXXXXX"
+  password: "XXXXXXX"
   fast_connect: True
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Espcamera1 Fallback Hotspot"
-    password: "password"
+    password: "XXXXXXX"
 
 captive_portal:
 
