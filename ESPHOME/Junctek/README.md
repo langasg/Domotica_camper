@@ -4,7 +4,8 @@
 ## Material Utilizado
 
 ### ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
-
+### SHUNT JUNCTEK KGF https://s.click.aliexpress.com/e/_ExIFMGy
+### SHUNT JUNCTEK KHF https://s.click.aliexpress.com/e/_EJzoOna
 
 ## PASOS
 1. Descargar codigo yaml, dependiendo del modelo de ShuNT -->  https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Junctek/kgf.yaml o https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/Junctek/khf.yaml
