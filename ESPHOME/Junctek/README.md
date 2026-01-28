@@ -9,8 +9,14 @@
 
 ## Preparación HW
 Connecta  pin A del termianl del junctek al pin RX del esp32
+
+
 Connecta  pin B del termianl del junctek al pin TX del esp32
+
+
 Connecta el pign GND al GND del esp32
+
+
 
 ## PASOS
 
