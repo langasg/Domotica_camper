@@ -4,7 +4,7 @@
 ## Material Utilizado
 
 ### ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
-
+### Video de la pantalla https://youtube.com/shorts/4CdXMfhAq4U?si=5T5EdY79eKD8h3Q_ 
 
 ## PASOS 
 1. Descargar codigo yaml -->  https://github.com/langasg/Domotica_camper/blob/main/ESPHOME/DISPLAY_JBD_BMS/JBD_VICTRON.yaml
