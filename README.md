@@ -1,7 +1,7 @@
 # Grupo Telegram --> https://t.me/domotica_camper
 
 ## Video
-[![Domotiza tu camper - Infraestructura ](https://github.com/langasg/Domotica_camper/blob/main/images/Infraestructura_Server_camper1.png)](https://www.youtube.com/watch?v=l5zyDahIfHw)
+[![Domotiza tu camper - Infraestructura ](https://github.com/langasg/Domotica_camper/blob/main/images/Infraestructura_Server_camper3.png)](https://www.youtube.com/watch?v=l5zyDahIfHw)
 
 
 [https://youtu.be/l5zyDahIfHw](https://youtu.be/l5zyDahIfHw)
