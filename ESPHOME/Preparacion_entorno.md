@@ -1,10 +1,8 @@
-# Grupo Telegram --> https://t.me/domotica_camper
-
-  #### Para realizar la instalación o estudio personalizado por favor contactar langasg@gmail.com
+# Grupo Telegram --><a href="https://t.me/domotica_camper" target="_blank">https://t.me/domotica_camper</a>
 
 ## Material Utilizado
 
-### JK BMS https://s.click.aliexpress.com/e/_EIZ1VaT
+### JK BMS <a href="https://s.click.aliexpress.com/e/_EIZ1VaT" target="_blank">https://s.click.aliexpress.com/e/_EIZ1VaT</a>
 
 ### ESP32 https://s.click.aliexpress.com/e/_Evd27Kb
 
