@@ -1,0 +1,300 @@
+type: vertical-stack
+card_mod:
+  style: |
+    ha-card { 
+      background: rgba(28, 28, 28, 0.5) !important; 
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px !important;
+      padding: 15px !important;
+    }
+cards:
+  - type: markdown
+    content: >-
+      <ha-icon icon='mdi:fire' style='color: rgba(255,255,255,0.7);
+      vertical-align: -3px;'></ha-icon> CALEFACCIÓN TRUMA
+    card_mod:
+      style: >
+        ha-card { background: none; border: none; box-shadow: none;
+        margin-bottom: 10px; margin-top: 0px; text-align: center; }
+
+        ha-markdown { color: rgba(255,255,255,0.5); font-weight: 700;
+        letter-spacing: 1.5px; font-size: 10px; }
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-number-card
+        entity: number.truma_sunly_temperature_setpoint
+        name: Temp
+        icon: mdi:thermometer-lines
+        icon_color: red
+        layout: horizontal
+        display_mode: buttons
+        step: 1
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(28, 28, 28, 0.5) !important;
+              border: 1px solid rgba(244, 67, 54, 0.3) !important;
+              height: 55px !important; padding: 8px !important;
+            }
+      - type: custom:mushroom-template-card
+        entity: switch.truma_sunly_heating
+        primary: Calefacción
+        secondary: "{{ 'ON' if is_state(entity, 'on') else 'OFF' }}"
+        icon: mdi:power
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'grey' }}"
+        layout: horizontal
+        tap_action:
+          action: toggle
+        card_mod:
+          style:
+            mushroom-state-info$: >
+              .primary { color: white !important; font-size: 11px !important; }
+
+              .secondary { color: {{ '#4caf50' if is_state(config.entity, 'on')
+              else '#757575' }} !important; font-weight: bold !important;
+              font-size: 12px !important; }
+            .: >
+              ha-card {
+                background: rgba(28, 28, 28, 0.5) !important;
+                border: 1px solid {{ 'rgba(76, 175, 80, 0.5)' if is_state(config.entity, 'on') else 'rgba(255, 255, 255, 0.05)' }} !important;
+                height: 55px !important; padding: 8px !important;
+              }
+
+              mushroom-shape-icon { --icon-symbol-size: 18px !important; width:
+              36px !important; height: 36px !important; }
+      - type: custom:mushroom-select-card
+        entity: select.truma_sunly_water_mode
+        name: Agua
+        icon: mdi:water-boiler
+        icon_color: blue
+        layout: horizontal
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(28, 28, 28, 0.5) !important;
+              border: 1px solid rgba(33, 150, 243, 0.3) !important;
+              height: 55px !important; padding: 8px !important;
+            }
+      - type: custom:mushroom-select-card
+        entity: select.truma_sunly_fan_mode
+        name: Vent
+        icon: mdi:fan
+        icon_color: cyan
+        layout: horizontal
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(28, 28, 28, 0.5) !important;
+              border: 1px solid rgba(0, 188, 212, 0.3) !important;
+              height: 55px !important; padding: 8px !important;
+            }
+  - type: custom:mushroom-template-card
+    primary: ""
+    secondary: ""
+    icon: ""
+    tap_action:
+      action: none
+    card_mod:
+      style: |
+        ha-card {
+          background: rgba(255, 255, 255, 0.1) !important;
+          height: 1px !important; border: none !important; box-shadow: none !important;
+          margin: 10px 20px 10px 20px !important; padding: 0px !important;
+        }
+  - type: grid
+    columns: 3
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: sensor.truma_sunly_room_temperature
+        primary: Salón
+        secondary: "{{ states(entity) | round(1) }} °C"
+        icon: mdi:thermometer
+        icon_color: red
+        layout: vertical
+        card_mod:
+          style:
+            mushroom-state-info$: >
+              .primary { font-size: 10px !important; font-weight: 700
+              !important; letter-spacing: 1px !important; opacity: 0.7; }
+
+              .secondary { font-size: 14px !important; font-weight: bold
+              !important; color: white !important; }
+            .: |
+              ha-card {
+                background: rgba(255, 255, 255, 0.03) !important;
+                border: 1px solid rgba(255, 255, 255, 0.05) !important;
+                border-bottom: 3px solid #f44336 !important;
+                border-radius: 12px !important;
+                padding-top: 10px !important; padding-bottom: 10px !important;
+              }
+      - type: custom:mushroom-template-card
+        entity: sensor.truma_sunly_water_temperature
+        primary: Agua
+        secondary: "{{ states(entity) | round(1) }} °C"
+        icon: mdi:water-thermometer
+        icon_color: blue
+        layout: vertical
+        card_mod:
+          style:
+            mushroom-state-info$: >
+              .primary { font-size: 10px !important; font-weight: 700
+              !important; letter-spacing: 1px !important; opacity: 0.7; }
+
+              .secondary { font-size: 14px !important; font-weight: bold
+              !important; color: white !important; }
+            .: |
+              ha-card {
+                background: rgba(255, 255, 255, 0.03) !important;
+                border: 1px solid rgba(255, 255, 255, 0.05) !important;
+                border-bottom: 3px solid #2196f3 !important;
+                border-radius: 12px !important;
+                padding-top: 10px !important; padding-bottom: 10px !important;
+              }
+      - type: custom:mushroom-template-card
+        entity: sensor.truma_sunly_supply_voltage
+        primary: Volt
+        secondary: "{{ states(entity) | round(1) }} V"
+        icon: mdi:flash
+        icon_color: orange
+        layout: vertical
+        card_mod:
+          style:
+            mushroom-state-info$: >
+              .primary { font-size: 10px !important; font-weight: 700
+              !important; letter-spacing: 1px !important; opacity: 0.7; }
+
+              .secondary { font-size: 14px !important; font-weight: bold
+              !important; color: white !important; }
+            .: |
+              ha-card {
+                background: rgba(255, 255, 255, 0.03) !important;
+                border: 1px solid rgba(255, 255, 255, 0.05) !important;
+                border-bottom: 3px solid #ff9800 !important;
+                border-radius: 12px !important;
+                padding-top: 10px !important; padding-bottom: 10px !important;
+              }
+  - type: custom:mushroom-template-card
+    primary: ""
+    secondary: ""
+    icon: ""
+    tap_action:
+      action: none
+    card_mod:
+      style: |
+        ha-card {
+          background: rgba(255, 255, 255, 0.1) !important;
+          height: 1px !important; border: none !important; box-shadow: none !important;
+          margin: 10px 20px 10px 20px !important; padding: 0px !important;
+        }
+  - type: grid
+    columns: 3
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.truma_sunly_heating_active
+        primary: "{{ 'Heating 🔥' if is_state(entity, 'on') else 'Heating' }}"
+        icon: ""
+        layout: horizontal
+        card_mod:
+          style:
+            mushroom-state-info$: >
+              .primary { color: {{ 'white' if is_state(config.entity, 'on') else
+              '#757575' }} !important; font-size: 11px !important; font-weight:
+              bold !important; text-align: center; }
+            .: |
+              ha-card {
+                background: {{ '#732F37' if is_state(config.entity, 'on') else 'rgba(255, 255, 255, 0.03)' }} !important;
+                border: 1px solid {{ '#732F37' if is_state(config.entity, 'on') else 'rgba(255, 255, 255, 0.05)' }} !important;
+                height: 36px !important; margin: 0px !important; padding: 0px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 18px !important;
+                {{ 'box-shadow: 0px 0px 10px #732F37;' if is_state(config.entity, 'on') }}
+              }
+              mushroom-shape-icon { display: none !important; }
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.truma_sunly_boiler_active
+        primary: "{{ 'Boiler 💧' if is_state(entity, 'on') else 'Boiler' }}"
+        icon: ""
+        layout: horizontal
+        card_mod:
+          style:
+            mushroom-state-info$: >
+              .primary { color: {{ 'white' if is_state(config.entity, 'on') else
+              '#757575' }} !important; font-size: 11px !important; font-weight:
+              bold !important; text-align: center; }
+            .: |
+              ha-card {
+                background: {{ '#5E81AC' if is_state(config.entity, 'on') else 'rgba(255, 255, 255, 0.03)' }} !important;
+                border: 1px solid {{ '#5E81AC' if is_state(config.entity, 'on') else 'rgba(255, 255, 255, 0.05)' }} !important;
+                height: 36px !important; margin: 0px !important; padding: 0px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 18px !important;
+                {{ 'box-shadow: 0px 0px 10px #5E81AC;' if is_state(config.entity, 'on') }}
+              }
+              mushroom-shape-icon { display: none !important; }
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.truma_sunly_window
+        primary: "{{ 'Vent. Open' if is_state(entity, 'off') else 'Vent. Close' }}"
+        icon: ""
+        layout: horizontal
+        card_mod:
+          style:
+            mushroom-state-info$: >
+              .primary { color: {{ 'white' if is_state(config.entity, 'off')
+              else '#757575' }} !important; font-size: 11px !important;
+              font-weight: bold !important; text-align: center; }
+            .: |
+              ha-card {
+                background: {{ '#BF616A' if is_state(config.entity, 'off') else 'rgba(255, 255, 255, 0.03)' }} !important;
+                border: 1px solid {{ '#BF616A' if is_state(config.entity, 'off') else 'rgba(255, 255, 255, 0.05)' }} !important;
+                height: 36px !important; margin: 0px !important; padding: 0px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 18px !important;
+                {{ 'box-shadow: 0px 0px 10px #BF616A;' if is_state(config.entity, 'off') }}
+              }
+              mushroom-shape-icon { display: none !important; }
+  - type: custom:mushroom-template-card
+    primary: Abrir Web Truma 6
+    icon: mdi:web
+    icon_color: blue
+    layout: horizontal
+    tap_action:
+      action: url
+      url_path: http://192.168.150.183/
+    card_mod:
+      style:
+        mushroom-state-info$: >
+          .primary { color: white !important; font-size: 14px !important;
+          font-weight: bold !important; letter-spacing: 0.5px; }
+        .: |
+          ha-card {
+            background: rgba(33, 150, 243, 0.15) !important;
+            border: 1px solid rgba(33, 150, 243, 0.3) !important;
+            height: 55px !important;
+            margin-top: 5px !important;
+            border-radius: 12px !important;
+            transition: all 0.2s ease-in-out;
+            align-items: center !important;
+          }
+          ha-card:active {
+            background: rgba(33, 150, 243, 0.3) !important;
+          }
+          mushroom-state-item {
+            width: fit-content !important;
+            margin: 0 auto !important;
+          }
+  - type: custom:mushroom-template-card
+    primary: ""
+    secondary: ""
+    icon: ""
+    tap_action:
+      action: none
+    card_mod:
+      style: |
+        ha-card {
+          background: rgba(255, 255, 255, 0.1) !important;
+          height: 1px !important; border: none !important; box-shadow: none !important;
+          margin: 10px 20px 10px 20px !important; padding: 0px !important;
+        }
+  - type: tile
+    entity: climate.radiador
+    vertical: false
+    features_position: bottom
+
