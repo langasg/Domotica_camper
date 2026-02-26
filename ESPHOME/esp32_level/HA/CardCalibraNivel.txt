@@ -1,0 +1,30 @@
+type: custom:button-card
+entity: button.esp32_nivelado_calibrar_nivel_cero
+name: CALIBRAR A 0.0°
+icon: mdi:target-variant
+styles:
+  card:
+    - height: 55px
+    - border-radius: 12px
+    - background-color: "#1c1c1c"
+    - border: "1px solid #444"
+    - box-shadow: 0px 4px 10px rgba(0,0,0,0.3)
+  grid:
+    - grid-template-areas: "\"i n\""
+    - grid-template-columns: 20% 1fr
+  name:
+    - justify-self: start
+    - font-size: 15px
+    - font-weight: bold
+    - color: white
+  icon:
+    - width: 25px
+    - color: "#ff9800"
+tap_action:
+  action: call-service
+  service: button.press
+  target:
+    entity_id: button.esp32_nivelado_calibrar_nivel_cero
+  confirmation:
+    text: ¿Esta la Autocaravana completamente a nivel para restablecer?
+
