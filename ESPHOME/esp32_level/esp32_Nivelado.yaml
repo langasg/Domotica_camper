@@ -1,0 +1,93 @@
+esphome:
+  name: esp32-nivelado
+  friendly_name: esp32_Nivelado
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: ""
+
+ota:
+  - platform: esphome
+    password: ""
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Almacenamiento del nivel
+globals:
+  - id: pitch_offset
+    type: float
+    restore_value: yes
+    initial_value: '0.0'
+  - id: roll_offset
+    type: float
+    restore_value: yes
+    initial_value: '0.0'
+
+i2c:
+  sda: 21
+  scl: 22
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: mpu6050
+    address: 0x68
+    update_interval: 0.5s
+    accel_x:
+      id: ax
+      internal: true
+    accel_y:
+      id: ay
+      internal: true
+    accel_z:
+      id: az
+      internal: true
+    temperature:
+      name: "Temperatura MPU6050"
+
+  - platform: template
+    name: "Inclinación Delante-Detrás"
+    id: pitch
+    unit_of_measurement: "°"
+    accuracy_decimals: 1
+    update_interval: 0.5s
+    lambda: |-
+      float current_pitch = (atan2(id(ax).state, sqrt(id(ay).state * id(ay).state + id(az).state * id(az).state)) * 180.0 / M_PI);
+      return current_pitch - id(pitch_offset);
+    filters:
+      - sliding_window_moving_average:
+          window_size: 10
+          send_every: 1
+
+  - platform: template
+    name: "Inclinación Derecha-Izquierda"
+    id: roll
+    unit_of_measurement: "°"
+    accuracy_decimals: 1
+    update_interval: 0.5s
+    lambda: |-
+      float current_roll = (atan2(-id(ay).state, id(az).state) * 180.0 / M_PI);
+      return current_roll - id(roll_offset);
+    filters:
+      - sliding_window_moving_average:
+          window_size: 10
+          send_every: 1
+
+button:
+  - platform: template
+    name: "Calibrar Nivel Cero"
+    icon: "mdi:target-variant"
+    on_press:
+      then:
+        - lambda: |-
+            id(pitch_offset) = (atan2(id(ax).state, sqrt(id(ay).state * id(ay).state + id(az).state * id(az).state)) * 180.0 / M_PI);
+            id(roll_offset) = (atan2(-id(ay).state, id(az).state) * 180.0 / M_PI);
